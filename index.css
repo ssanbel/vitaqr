@@ -1,0 +1,279 @@
+/* --------- GENERAL --------- */
+body {
+  margin: 0;
+  font-family: Helvetica, sans-serif;
+  background-color: #ffffff;
+  color: #000;
+}
+
+h1, h2, h3 {
+  margin: 0;
+  font-weight: bold;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* --------- HEADER --------- */
+.main-header {
+  background-color: #EDEEE9;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo img {
+  height: 45px;
+  display: block;
+}
+
+.navbar {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.menu {
+  display: flex;
+  list-style: none;
+  gap: 30px;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+.menu a {
+  text-decoration: none;
+  color: #284667;
+  font-weight: bold;
+  transition: 0.2s ease;
+}
+
+.menu a:hover {
+  color: #AA443F;
+}
+
+.menu i {
+  font-size: 18px;
+}
+
+/* Hamburguesa móvil */
+.menu-toggle {
+  display: none;
+  font-size: 26px;
+  color: #284667;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    background-color: #EDEEE9;
+    border: 1px solid hsl(0, 0%, 80%);
+    border-radius: 8px;
+    padding: 15px;
+    z-index: 1001;
+  }
+
+  .navbar.active {
+    display: block;
+  }
+
+  .navbar .menu {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+}
+
+/* --------- HERO --------- */
+.hero {
+  background: url('img/banner-salud.jpg') no-repeat center center/cover;
+  color: white;
+  padding: 100px 20px;
+  text-align: left;
+}
+
+.hero-text {
+  max-width: 600px;
+  background-color: rgba(0,0,0,0.5);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.hero-text h1 {
+  font-size: 36px;
+  margin-bottom: 15px;
+}
+
+.hero-text p {
+  font-size: 18px;
+}
+
+/* --------- BENEFICIOS --------- */
+.benefits {
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.benefits h2 {
+  font-size: 32px;
+  margin-bottom: 30px;
+  color: #284667;
+}
+
+.cards {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+.card {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 400px;
+  text-align: left;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.card h3 {
+  font-size: 20px;
+  color: #AA443F;
+  margin-bottom: 10px;
+}
+
+.card p {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* --------- FOOTER --------- */
+.footer {
+  background-color: #f2f2f2;
+  padding: 15px;
+  text-align: center;
+  font-size: 14px;
+  color: #333;
+}
+
+.footer a {
+  margin-left: 10px;
+  text-decoration: none;
+  color: #AA443F;
+}
+
+/* --------- MODAL LOGIN (ESTILOS BASE) --------- */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  padding-top: 80px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: auto;
+  padding: 30px 40px;
+  border: 1px solid #888;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.2);
+  position: relative;
+}
+
+.modal-content h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #284667;
+}
+
+.modal-content label {
+  display: block;
+  margin-top: 15px;
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.btn {
+  width: 100%;
+  background-color: #AA443F;
+  color: white;
+  padding: 12px;
+  margin-top: 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #902b30;
+}
+
+.gmail-btn {
+  background-color: #fff;
+  color: #444;
+  border: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gmail-btn:hover {
+  background-color: #f5f5f5;
+}
+
+.gmail-btn img {
+  margin-right: 10px;
+}
+
+.close {
+  color: #aaa;
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+hr {
+  margin: 25px 0;
+}

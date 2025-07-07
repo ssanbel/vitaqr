@@ -1,0 +1,54 @@
+body {
+  background-color: #EDEEE9;
+  font-family: Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Contenedor principal */
+.carrito-contenido {
+  padding: 40px 20px;
+  text-align: center;
+}
+
+/* Tarjeta de producto */
+.producto {
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+  padding: 20px 30px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+/* Total */
+.total {
+  font-weight: bold;
+  font-size: 1.3em;
+  margin-top: 20px;
+}
+
+/* Botón comprar o pagar */
+.boton-comprar {
+  display: inline-block;
+  margin-top: 25px;
+  background-color: #AA443F;
+  color: white;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1em;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.boton-comprar:hover {
+  background-color: #902f2a;
+}

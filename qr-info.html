@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Información médica - VitaQR</title>
+  <link rel="stylesheet" href="index.css" />
+  <style>
+    body {
+      font-family: Helvetica, sans-serif;
+      margin: 0;
+      background-color: #F8F8F8;
+    }
+
+    header {
+      background-color: #EDEEE9;
+      padding: 20px;
+      text-align: center;
+      font-size: 22px;
+      color: #284667;
+      font-weight: bold;
+    }
+
+    .info-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 1200px;
+      margin: 30px auto;
+      gap: 40px;
+    }
+
+    .columna {
+      flex: 1 1 400px;
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .dato {
+      margin-bottom: 12px;
+    }
+
+    .dato strong {
+      color: #AA443F;
+    }
+
+    .foto-usuario {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .foto-usuario img {
+      max-width: 150px;
+      border-radius: 50%;
+      border: 4px solid #284667;
+    }
+
+    @media (max-width: 768px) {
+      .info-container {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>Información médica</header>
+
+  <div class="info-container">
+    <div class="columna" id="col1">
+      <div class="foto-usuario" id="fotoContainer"></div>
+    </div>
+    <div class="columna" id="col2"></div>
+  </div>
+
+  <script>
+    const datos = JSON.parse(localStorage.getItem("datosUsuario") || "{}");
+
+    const col1 = document.getElementById("col1");
+    const col2 = document.getElementById("col2");
+
+    const grupos = [
+      ["nombres", "apellidos", "dni", "edad", "sexo", "estado_civil", "religion", "sangre", "nacimiento"],
+      ["nombre_contacto", "telefono_contacto"],
+      ["peso", "altura", "alergias", "condiciones", "cirugias", "vacunas", "seguro", "clinica"],
+      ["med_continuos", "med_emergencia"],
+      ["antecedentes_alergia", "enfermedades_hereditarias"],
+      ["fuma", "bebe"]
+    ];
+
+    const etiquetas = {
+      nombres: "Nombres",
+      apellidos: "Apellidos",
+      dni: "DNI",
+      edad: "Edad",
+      sexo: "Sexo",
+      estado_civil: "Estado Civil",
+      religion: "Religión",
+      sangre: "Tipo de Sangre",
+      nacimiento: "Fecha de Nacimiento",
+      nombre_contacto: "Contacto de Emergencia",
+      telefono_contacto: "Teléfono de Contacto",
+      peso: "Peso",
+      altura: "Altura",
+      alergias: "Alergias",
+      condiciones: "Condiciones Médicas",
+      cirugias: "Cirugías",
+      vacunas: "Vacunas",
+      seguro: "Seguro",
+      clinica: "Clínica",
+      med_continuos: "Medicamentos Continuos",
+      med_emergencia: "Medicamentos Emergencia",
+      antecedentes_alergia: "Antecedentes de Alergia",
+      enfermedades_hereditarias: "Enfermedades Hereditarias",
+      fuma: "¿Fuma?",
+      bebe: "¿Bebe?"
+    };
+
+    // Mostrar la foto si existe
+    if (datos.fotoBase64) {
+      const foto = document.createElement("img");
+      foto.src = datos.fotoBase64;
+      document.getElementById("fotoContainer").appendChild(foto);
+    }
+
+    // Llenar columnas
+    let mitad = Math.ceil(Object.keys(etiquetas).length / 2);
+    let count = 0;
+
+    for (const grupo of grupos) {
+      for (const clave of grupo) {
+        if (datos[clave]) {
+          const div = document.createElement("div");
+          div.className = "dato";
+          div.innerHTML = `<strong>${etiquetas[clave]}:</strong> ${datos[clave]}`;
+          if (count < mitad) {
+            col1.appendChild(div);
+          } else {
+            col2.appendChild(div);
+          }
+          count++;
+        }
+      }
+    }
+  </script>
+  <!-- FIREBASE SDK + FIRESTORE -->
+<script type="module">
+  // Importamos Firebase App y Firestore
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  // Tu configuración real (copiada de la captura)
+  const firebaseConfig = {
+    apiKey: "AIzaSyB9j5KqbxMFEC88tbZ1ApUWrKqre01TmcA",
+    authDomain: "vitaqronline.firebaseapp.com",
+    projectId: "vitaqronline",
+    storageBucket: "vitaqronline.appspot.com",
+    messagingSenderId: "584669491826",
+    appId: "1:584669491826:web:484adb09e2d80e1c8bbc8eb",
+    measurementId: "G-2B7W7TL32N"
+  };
+
+  // Inicializa Firebase y Firestore
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // Enviar formulario y guardar en Firestore
+  const form = document.getElementById("registro-form");
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+    const datos = {};
+    formData.forEach((valor, clave) => {
+      datos[clave] = valor;
+    });
+
+    try {
+      const docRef = await addDoc(collection(db, "usuarios"), datos);
+      localStorage.setItem("usuarioID", docRef.id);
+      alert("Registro exitoso ✅");
+      window.location.href = "perfil.html";
+    } catch (error) {
+      console.error("Error al guardar:", error);
+      alert("Hubo un error al guardar tus datos.");
+    }
+  });
+</script>
+
+</body>
+</html>

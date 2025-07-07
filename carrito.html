@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Carrito - VitaQR</title>
+  <link rel="stylesheet" href="index.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Helvetica, sans-serif;
+      background-color: #EDEEE9;
+    }
+
+    .carrito-contenido {
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    .producto {
+      background-color: white;
+      border: 1px solid #ccc;
+      border-radius: 15px;
+      padding: 20px 30px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    }
+
+    .total {
+      font-weight: bold;
+      font-size: 1.3em;
+      margin-top: 20px;
+    }
+
+    .boton-comprar {
+      display: inline-block;
+      margin-top: 25px;
+      background-color: #AA443F;
+      color: white;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 12px;
+      font-size: 1em;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .boton-comprar:hover {
+      background-color: #902f2a;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- CABECERA IGUAL A INDEX -->
+  <header class="main-header">
+    <div class="header-container">
+      <a href="index.html" class="logo">
+        <img src="img/logo-vitaqr.png" alt="VitaQR Logo">
+      </a>
+
+      <nav class="navbar" id="navbar">
+        <ul class="menu">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="productos.html">Productos</a></li>
+          <li><a href="preguntas-frecuentes.html">Preguntas Frecuentes</a></li>
+          <li><a href="#" id="abrirSesion" title="Iniciar sesión"><i class="fas fa-user"></i></a></li>
+          <li><a href="carrito.html" title="Carrito"><i class="fas fa-shopping-cart"></i></a></li>
+        </ul>
+      </nav>
+
+      <div class="menu-toggle" id="menu-toggle">
+        <i class="fas fa-bars"></i>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENIDO DEL CARRITO -->
+  <div class="carrito-contenido" id="carrito-container">
+    <!-- Se llena con JS -->
+  </div>
+
+  <!-- FOOTER IGUAL A INDEX -->
+  <footer class="footer">
+    <div class="footer-content">
+      <p>© 2025 VitaQR - Proyecto Académico</p>
+      <a href="terminos-condiciones.html">Términos y Condiciones</a>
+    </div>
+  </footer>
+
+  <!-- MODAL LOGIN -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Inicia sesión</h2>
+      <form id="loginForm">
+        <label for="email">Correo electrónico:</label>
+        <input type="email" id="email" required>
+        <label for="password">Contraseña:</label>
+        <input type="password" id="password" required>
+        <button type="button" class="btn" onclick="iniciarSesion()">Iniciar sesión</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- JS FUNCIONALIDAD DEL CARRITO + SESIÓN -->
+  <script>
+    const modal = document.getElementById("loginModal");
+    const closeBtn = document.querySelector(".close");
+    const abrirSesion = document.getElementById("abrirSesion");
+    const toggle = document.getElementById("menu-toggle");
+    const navbar = document.getElementById("navbar");
+
+    abrirSesion.onclick = () => modal.style.display = "block";
+    closeBtn.onclick = () => modal.style.display = "none";
+    window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; };
+    toggle.onclick = () => navbar.classList.toggle("active");
+
+    function iniciarSesion() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      if (email && password) {
+        localStorage.setItem("usuarioLogueado", email);
+        modal.style.display = "none";
+        window.location.href = "productos.html";
+      } else {
+        alert("Completa todos los campos.");
+      }
+    }
+
+    // Lógica del carrito
+    const carritoContainer = document.getElementById("carrito-container");
+    const sesion = localStorage.getItem("usuarioLogueado");
+    const productos = JSON.parse(localStorage.getItem("carrito")) || [];
+
+    function mostrarCarritoVacio() {
+      carritoContainer.innerHTML = `
+        <h2>Carrito vacío</h2>
+        <a href="productos.html" class="boton-comprar">Comprar</a>
+      `;
+    }
+
+    function mostrarCarritoConProductos() {
+      let total = 10;
+      let html = productos.map(producto => {
+        total += producto.precio * producto.cantidad;
+        return `
+          <div class="producto">
+            <span>${producto.nombre} (x${producto.cantidad})</span>
+            <span>S/ ${(producto.precio * producto.cantidad).toFixed(2)}</span>
+          </div>
+        `;
+      }).join("");
+
+      html += `
+        <div class="producto">
+          <span>Delivery</span>
+          <span>S/ 10.00</span>
+        </div>
+        <div class="total">Total: S/ ${total.toFixed(2)}</div>
+        <button class="boton-comprar" onclick="pagar()">Pagar con Izipay</button>
+      `;
+
+      carritoContainer.innerHTML = html;
+    }
+
+    function pagar() {
+      alert("✅ Compra realizada con éxito. Gracias por confiar en VitaQR.");
+      localStorage.removeItem("carrito");
+      location.reload();
+    }
+
+    if (!sesion) {
+      mostrarCarritoVacio();
+    } else {
+      if (productos.length === 0) {
+        mostrarCarritoVacio();
+      } else {
+        mostrarCarritoConProductos();
+      }
+    }
+  </script>
+  <script>
+  if (!localStorage.getItem("usuarioLogueado")) {
+    window.location.href = "index.html"; // O mostrar modal
+  }
+</script>
+<script src="login.js"></script>
+
+<!-- FIREBASE SDK + FIRESTORE -->
+<script type="module">
+  // Importamos Firebase App y Firestore
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  // Tu configuración real (copiada de la captura)
+  const firebaseConfig = {
+    apiKey: "AIzaSyB9j5KqbxMFEC88tbZ1ApUWrKqre01TmcA",
+    authDomain: "vitaqronline.firebaseapp.com",
+    projectId: "vitaqronline",
+    storageBucket: "vitaqronline.appspot.com",
+    messagingSenderId: "584669491826",
+    appId: "1:584669491826:web:484adb09e2d80e1c8bbc8eb",
+    measurementId: "G-2B7W7TL32N"
+  };
+
+  // Inicializa Firebase y Firestore
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // Enviar formulario y guardar en Firestore
+  const form = document.getElementById("registro-form");
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+    const datos = {};
+    formData.forEach((valor, clave) => {
+      datos[clave] = valor;
+    });
+
+    try {
+      const docRef = await addDoc(collection(db, "usuarios"), datos);
+      localStorage.setItem("usuarioID", docRef.id);
+      alert("Registro exitoso ✅");
+      window.location.href = "perfil.html";
+    } catch (error) {
+      console.error("Error al guardar:", error);
+      alert("Hubo un error al guardar tus datos.");
+    }
+  });
+</script>
+
+</body>
+</html>

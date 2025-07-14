@@ -11,7 +11,6 @@
       font-family: Helvetica, sans-serif;
     }
 
-    /* HEADER ESTILIZADO */
     .main-header {
       background-color: #EDEEE9;
       position: sticky;
@@ -146,23 +145,75 @@
       text-decoration: none;
       color: #AA443F;
     }
+
+    /* Modal básico */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1002;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.5);
+    }
+
+    .modal-content {
+      background-color: #fff;
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    .close {
+      float: right;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .btn {
+      background-color: #284667;
+      color: #fff;
+      padding: 10px;
+      border: none;
+      margin-top: 10px;
+      width: 100%;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background-color: #AA443F;
+    }
+
+    input[type="email"], input[type="password"] {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
   </style>
 </head>
 <body>
   <!-- Header -->
   <header class="main-header">
     <div class="header-container">
-      <a href="index.html" class="logo">
+      <a href="./index.html" class="logo">
         <img src="img/logo-vitaqr.png" alt="VitaQR Logo">
       </a>
 
       <nav class="navbar" id="navbar">
         <ul class="menu">
-          <li><a href="index.html">Inicio</a></li>
-          <li><a href="productos.html">Productos</a></li>
-          <li><a href="preguntas-frecuentes.html">Preguntas Frecuentes</a></li>
+          <li><a href="./index.html">Inicio</a></li>
+          <li><a href="./productos.html">Productos</a></li>
+          <li><a href="./preguntas-frecuentes.html">Preguntas Frecuentes</a></li>
           <li><a href="#" id="abrirSesion" title="Iniciar sesión"><i class="fas fa-user"></i></a></li>
-          <li><a href="carrito.html" title="Carrito"><i class="fas fa-shopping-cart"></i></a></li>
+          <li><a href="./carrito.html" title="Carrito"><i class="fas fa-shopping-cart"></i></a></li>
         </ul>
       </nav>
 
@@ -186,7 +237,7 @@
     <div class="cards">
       <div class="card">
         <h3>VITAQR</h3>
-        <p>En VITAQR, nos apasiona transformar la manera en que compartimos información y experiencias a través de soluciones inteligentes y sostenibles. Somos un equipo comprometido con la innovación y el diseño de herramientas tecnológicas que permiten a las personas y empresas optimizar su presencia digital.</p>
+        <p>En VITAQR, nos apasiona transformar la manera en que compartimos información y experiencias a través de soluciones inteligentes y sostenibles.</p>
       </div>
       <div class="card">
         <h3>MISIÓN</h3>
@@ -199,7 +250,7 @@
   <footer class="footer">
     <div class="footer-content">
       <p>© 2025 VitaQR - Proyecto Académico</p>
-      <a href="terminos-condiciones.html">Términos y Condiciones</a>
+      <a href="./terminos-condiciones.html">Términos y Condiciones</a>
     </div>
   </footer>
 
@@ -211,22 +262,18 @@
       <form id="loginForm">
         <label for="email">Correo electrónico:</label>
         <input type="email" id="email" required>
-
         <label for="password">Contraseña:</label>
         <input type="password" id="password" required>
-
-        <button type="button" class="btn" onclick="window.location.href='registro.html'">Iniciar sesión</button>
+        <button type="submit" class="btn">Iniciar sesión</button>
       </form>
-     
     </div>
   </div>
 
-  <!-- JS Scripts -->
+  <!-- Scripts -->
   <script>
     const modal = document.getElementById("loginModal");
     const closeBtn = document.querySelector(".close");
     const loginForm = document.getElementById("loginForm");
-    const gmailBtn = document.getElementById("gmailLogin");
     const abrirSesion = document.getElementById("abrirSesion");
     const toggle = document.getElementById("menu-toggle");
     const navbar = document.getElementById("navbar");
@@ -252,72 +299,15 @@
       if (email && password) {
         localStorage.setItem("usuarioLogueado", email);
         modal.style.display = "none";
-        window.location.href = "registro.html";
+        window.location.href = "./registro.html";
       } else {
         alert("Por favor, completa todos los campos.");
       }
-    };
-
-    gmailBtn.onclick = () => {
-      localStorage.setItem("usuarioLogueado", "gmail_user@gmail.com");
-      modal.style.display = "none";
-      window.location.href = "registro.html";
     };
 
     toggle.onclick = () => {
       navbar.classList.toggle("active");
     };
   </script>
-  <script>
-  if (!localStorage.getItem("usuarioLogueado")) {
-    window.location.href = "index.html"; // O mostrar modal
-  }
-</script>
-<script src="login.js"></script>
-<!-- FIREBASE SDK + FIRESTORE -->
-<script type="module">
-  // Importamos Firebase App y Firestore
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-  // Tu configuración real (copiada de la captura)
-  const firebaseConfig = {
-    apiKey: "AIzaSyB9j5KqbxMFEC88tbZ1ApUWrKqre01TmcA",
-    authDomain: "vitaqronline.firebaseapp.com",
-    projectId: "vitaqronline",
-    storageBucket: "vitaqronline.appspot.com",
-    messagingSenderId: "584669491826",
-    appId: "1:584669491826:web:484adb09e2d80e1c8bbc8eb",
-    measurementId: "G-2B7W7TL32N"
-  };
-
-  // Inicializa Firebase y Firestore
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-
-  // Enviar formulario y guardar en Firestore
-  const form = document.getElementById("registro-form");
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const formData = new FormData(form);
-    const datos = {};
-    formData.forEach((valor, clave) => {
-      datos[clave] = valor;
-    });
-
-    try {
-      const docRef = await addDoc(collection(db, "usuarios"), datos);
-      localStorage.setItem("usuarioID", docRef.id);
-      alert("Registro exitoso ✅");
-      window.location.href = "perfil.html";
-    } catch (error) {
-      console.error("Error al guardar:", error);
-      alert("Hubo un error al guardar tus datos.");
-    }
-  });
-</script>
-
 </body>
 </html>
-

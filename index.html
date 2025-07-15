@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Inicio - VitaQR</title>
-  <link rel="stylesheet" href="index.css" />
+  <link rel="stylesheet" href="./index.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     body {
@@ -98,7 +98,7 @@
     }
 
     .hero {
-      background: url('img/banner-salud.jpg') no-repeat center center/cover;
+      background: url('./img/banner-salud.jpg') no-repeat center center/cover;
       color: white;
       padding: 100px 20px;
       text-align: left;
@@ -146,7 +146,7 @@
       color: #AA443F;
     }
 
-    /* Modal básico */
+    /* Modal */
     .modal {
       display: none;
       position: fixed;
@@ -189,7 +189,8 @@
       background-color: #AA443F;
     }
 
-    input[type="email"], input[type="password"] {
+    input[type="email"],
+    input[type="password"] {
       width: 100%;
       padding: 8px;
       margin-top: 5px;
@@ -204,19 +205,17 @@
   <header class="main-header">
     <div class="header-container">
       <a href="./index.html" class="logo">
-        <img src="img/logo-vitaqr.png" alt="VitaQR Logo">
+        <img src="./img/logo-vitaqr.png" alt="VitaQR Logo">
       </a>
-
       <nav class="navbar" id="navbar">
         <ul class="menu">
-          <li><a href="index.html">Inicio</a></li>
-          <li><a href="productos.html">Productos</a></li>
-          <li><a href="preguntas-frecuentes.html">Preguntas Frecuentes</a></li>
+          <li><a href="./index.html">Inicio</a></li>
+          <li><a href="./productos.html">Productos</a></li>
+          <li><a href="./preguntas-frecuentes.html">Preguntas Frecuentes</a></li>
           <li><a href="#" id="abrirSesion" title="Iniciar sesión"><i class="fas fa-user"></i></a></li>
-          <li><a href="carrito.html" title="Carrito"><i class="fas fa-shopping-cart"></i></a></li>
+          <li><a href="./carrito.html" title="Carrito"><i class="fas fa-shopping-cart"></i></a></li>
         </ul>
       </nav>
-
       <div class="menu-toggle" id="menu-toggle">
         <i class="fas fa-bars"></i>
       </div>
@@ -231,7 +230,7 @@
     </div>
   </section>
 
-  <!-- Información -->
+  <!-- Sección de información -->
   <section class="benefits">
     <h2>¿Quiénes somos?</h2>
     <div class="cards">
@@ -248,10 +247,8 @@
 
   <!-- Footer -->
   <footer class="footer">
-    <div class="footer-content">
-      <p>© 2025 VitaQR - Proyecto Académico</p>
-      <a href="./terminos-condiciones.html">Términos y Condiciones</a>
-    </div>
+    <p>© 2025 VitaQR - Proyecto Académico</p>
+    <a href="./terminos-condiciones.html">Términos y Condiciones</a>
   </footer>
 
   <!-- Modal de inicio de sesión -->
@@ -269,7 +266,7 @@
     </div>
   </div>
 
-  <!-- Scripts -->
+  <!-- Script -->
   <script>
     const modal = document.getElementById("loginModal");
     const closeBtn = document.querySelector(".close");
@@ -287,7 +284,7 @@
     };
 
     window.onclick = (e) => {
-      if (e.target == modal) {
+      if (e.target === modal) {
         modal.style.display = "none";
       }
     };

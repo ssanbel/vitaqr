@@ -52,6 +52,11 @@
       color: #AA443F;
     }
 
+    #nombreUsuarioNav {
+      font-size: 12px;
+      margin-left: 5px;
+    }
+
     .faq-section {
       padding: 60px 20px;
       max-width: 900px;
@@ -118,7 +123,6 @@
       margin-left: 10px;
     }
 
-    /* Modal */
     .modal {
       display: none;
       position: fixed;
@@ -162,10 +166,6 @@
       border-radius: 5px;
     }
 
-    .gmail-btn {
-      background-color: #DB4437;
-    }
-
     .close {
       float: right;
       font-size: 20px;
@@ -180,7 +180,7 @@
 </head>
 <body>
 
-<!-- Modal de inicio de sesión -->
+<!-- MODAL LOGIN -->
 <div id="loginModal" class="modal">
   <div class="modal-content">
     <span class="close">&times;</span>
@@ -192,11 +192,10 @@
       <input type="password" id="password" required>
       <button type="submit" class="btn">Iniciar sesión</button>
     </form>
-   
   </div>
 </div>
 
-<!-- CABECERA CON MENÚ ACTUALIZADO -->
+<!-- CABECERA -->
 <header class="main-header">
   <div class="menu-container">
     <img src="img/logo-vitaqr.png" alt="VitaQR Logo" class="logo-img">
@@ -205,14 +204,18 @@
         <li><a href="index.html">Inicio</a></li>
         <li><a href="productos.html">Productos</a></li>
         <li><a href="preguntas-frecuentes.html" class="active">Preguntas Frecuentes</a></li>
-        <li><a href="#" id="abrirSesion" title="Iniciar sesión"><i class="fas fa-user"></i></a></li>
+        <li>
+          <a href="#" id="abrirSesion" title="Iniciar sesión">
+            <i class="fas fa-user"></i> <span id="nombreUsuarioNav"></span>
+          </a>
+        </li>
         <li><a href="carrito.html" title="Carrito"><i class="fas fa-shopping-cart"></i></a></li>
       </ul>
     </nav>
   </div>
 </header>
 
-<!-- CONTENIDO DE PREGUNTAS -->
+<!-- CONTENIDO -->
 <section class="faq-section">
   <h1 class="faq-title">Preguntas Frecuentes</h1>
 
@@ -269,7 +272,7 @@
   </div>
 </footer>
 
-<!-- Scripts -->
+<!-- SCRIPTS -->
 <script>
   document.querySelectorAll('.faq-question').forEach(item => {
     item.addEventListener('click', () => {
@@ -279,40 +282,39 @@
 
   const modal = document.getElementById("loginModal");
   const closeBtn = document.querySelector(".close");
-  const loginForm = document.getElementById("loginForm");
-  const gmailBtn = document.getElementById("gmailLogin");
   const abrirSesion = document.getElementById("abrirSesion");
+  const nombreUsuarioNav = document.getElementById("nombreUsuarioNav");
 
-  abrirSesion.onclick = () => modal.style.display = "block";
-  closeBtn.onclick = () => modal.style.display = "none";
-  window.onclick = (e) => {
-    if (e.target == modal) modal.style.display = "none";
+  const sesion = JSON.parse(localStorage.getItem("usuarioLogueado"));
+  if (sesion) {
+    nombreUsuarioNav.textContent = sesion.nombre || sesion.email || sesion;
+    abrirSesion.href = "perfil.html";
+  }
+
+  abrirSesion.onclick = (e) => {
+    if (!localStorage.getItem("usuarioLogueado")) {
+      e.preventDefault();
+      modal.style.display = "block";
+    }
   };
 
+  closeBtn.onclick = () => modal.style.display = "none";
+  window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; };
+
+  const loginForm = document.getElementById("loginForm");
   loginForm.onsubmit = (e) => {
     e.preventDefault();
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
     if (email && password) {
-      localStorage.setItem("usuarioLogueado", email);
+      const usuario = { email, nombre: "Usuario" };
+      localStorage.setItem("usuarioLogueado", JSON.stringify(usuario));
       modal.style.display = "none";
+      window.location.href = "perfil.html";
     } else {
       alert("Por favor, completa todos los campos.");
     }
   };
-
-  gmailBtn.onclick = () => {
-    localStorage.setItem("usuarioLogueado", "gmail_user@gmail.com");
-    modal.style.display = "none";
-  };
 </script>
-<script>
-  if (!localStorage.getItem("usuarioLogueado")) {
-    window.location.href = "index.html"; // O mostrar modal
-  }
-</script>
-<script src="login.js"></script>
-<script src="auth.js"></script>
-
 </body>
 </html>

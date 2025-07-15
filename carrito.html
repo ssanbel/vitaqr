@@ -55,9 +55,59 @@
     .boton-comprar:hover {
       background-color: #902f2a;
     }
-  </style>
-  <script src="auth.js"></script>
 
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1002;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.5);
+    }
+
+    .modal-content {
+      background-color: #fff;
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    .close {
+      float: right;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .btn {
+      background-color: #284667;
+      color: #fff;
+      padding: 10px;
+      border: none;
+      margin-top: 10px;
+      width: 100%;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background-color: #AA443F;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+  </style>
 </head>
 <body>
 
@@ -73,7 +123,11 @@
           <li><a href="index.html">Inicio</a></li>
           <li><a href="productos.html">Productos</a></li>
           <li><a href="preguntas-frecuentes.html">Preguntas Frecuentes</a></li>
-          <li><a href="#" id="abrirSesion" title="Iniciar sesión"><i class="fas fa-user"></i></a></li>
+          <li>
+            <a href="#" id="abrirSesion" title="Iniciar sesión">
+              <i class="fas fa-user"></i> <span id="nombreUsuarioNav" style="font-size: 12px;"></span>
+            </a>
+          </li>
           <li><a href="carrito.html" title="Carrito"><i class="fas fa-shopping-cart"></i></a></li>
         </ul>
       </nav>
@@ -107,138 +161,106 @@
         <input type="email" id="email" required>
         <label for="password">Contraseña:</label>
         <input type="password" id="password" required>
-        <button type="button" class="btn" onclick="iniciarSesion()">Iniciar sesión</button>
+        <button type="submit" class="btn">Iniciar sesión</button>
       </form>
     </div>
   </div>
 
-  <!-- JS FUNCIONALIDAD DEL CARRITO + SESIÓN -->
+  <!-- FUNCIONALIDAD -->
   <script>
-    const modal = document.getElementById("loginModal");
-    const closeBtn = document.querySelector(".close");
-    const abrirSesion = document.getElementById("abrirSesion");
-    const toggle = document.getElementById("menu-toggle");
-    const navbar = document.getElementById("navbar");
+    document.addEventListener("DOMContentLoaded", () => {
+      const modal = document.getElementById("loginModal");
+      const closeBtn = document.querySelector(".close");
+      const abrirSesion = document.getElementById("abrirSesion");
+      const toggle = document.getElementById("menu-toggle");
+      const navbar = document.getElementById("navbar");
+      const nombreUsuarioNav = document.getElementById("nombreUsuarioNav");
 
-    abrirSesion.onclick = () => modal.style.display = "block";
-    closeBtn.onclick = () => modal.style.display = "none";
-    window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; };
-    toggle.onclick = () => navbar.classList.toggle("active");
-
-    function iniciarSesion() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      if (email && password) {
-        localStorage.setItem("usuarioLogueado", email);
-        modal.style.display = "none";
-        window.location.href = "productos.html";
-      } else {
-        alert("Completa todos los campos.");
+      // Mostrar nombre de usuario si está logueado
+      const sesion = JSON.parse(localStorage.getItem("usuarioLogueado"));
+      if (sesion) {
+        nombreUsuarioNav.textContent = sesion.nombre || sesion.email;
+        abrirSesion.href = "perfil.html";
       }
-    }
 
-    // Lógica del carrito
-    const carritoContainer = document.getElementById("carrito-container");
-    const sesion = localStorage.getItem("usuarioLogueado");
-    const productos = JSON.parse(localStorage.getItem("carrito")) || [];
+      // Si no hay sesión, mostrar modal al hacer clic
+      abrirSesion.onclick = (e) => {
+        if (!localStorage.getItem("usuarioLogueado")) {
+          e.preventDefault();
+          modal.style.display = "block";
+        }
+      };
 
-    function mostrarCarritoVacio() {
-      carritoContainer.innerHTML = `
-        <h2>Carrito vacío</h2>
-        <a href="productos.html" class="boton-comprar">Comprar</a>
-      `;
-    }
+      closeBtn.onclick = () => modal.style.display = "none";
+      window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; };
+      toggle.onclick = () => navbar.classList.toggle("active");
 
-    function mostrarCarritoConProductos() {
-      let total = 10;
-      let html = productos.map(producto => {
-        total += producto.precio * producto.cantidad;
-        return `
-          <div class="producto">
-            <span>${producto.nombre} (x${producto.cantidad})</span>
-            <span>S/ ${(producto.precio * producto.cantidad).toFixed(2)}</span>
-          </div>
+      const loginForm = document.getElementById("loginForm");
+      loginForm.onsubmit = (e) => {
+        e.preventDefault();
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        if (email && password) {
+          const usuario = { email, nombre: "Usuario" }; // puedes mejorar esto con Firestore
+          localStorage.setItem("usuarioLogueado", JSON.stringify(usuario));
+          modal.style.display = "none";
+          window.location.href = "perfil.html";
+        } else {
+          alert("Completa todos los campos.");
+        }
+      };
+
+      // Mostrar contenido del carrito
+      const carritoContainer = document.getElementById("carrito-container");
+      const productos = JSON.parse(localStorage.getItem("carrito")) || [];
+
+      function mostrarCarritoVacio() {
+        carritoContainer.innerHTML = `
+          <h2>Carrito vacío</h2>
+          <a href="productos.html" class="boton-comprar">Comprar</a>
         `;
-      }).join("");
+      }
 
-      html += `
-        <div class="producto">
-          <span>Delivery</span>
-          <span>S/ 10.00</span>
-        </div>
-        <div class="total">Total: S/ ${total.toFixed(2)}</div>
-        <button class="boton-comprar" onclick="pagar()">Pagar con Izipay</button>
-      `;
+      function mostrarCarritoConProductos() {
+        let total = 10;
+        let html = productos.map(producto => {
+          total += producto.precio * producto.cantidad;
+          return `
+            <div class="producto">
+              <span>${producto.nombre} (x${producto.cantidad})</span>
+              <span>S/ ${(producto.precio * producto.cantidad).toFixed(2)}</span>
+            </div>
+          `;
+        }).join("");
 
-      carritoContainer.innerHTML = html;
-    }
+        html += `
+          <div class="producto">
+            <span>Delivery</span>
+            <span>S/ 10.00</span>
+          </div>
+          <div class="total">Total: S/ ${total.toFixed(2)}</div>
+          <button class="boton-comprar" onclick="pagar()">Pagar con Izipay</button>
+        `;
 
-    function pagar() {
-      alert("✅ Compra realizada con éxito. Gracias por confiar en VitaQR.");
-      localStorage.removeItem("carrito");
-      location.reload();
-    }
+        carritoContainer.innerHTML = html;
+      }
 
-    if (!sesion) {
-      mostrarCarritoVacio();
-    } else {
-      if (productos.length === 0) {
+      if (!sesion) {
         mostrarCarritoVacio();
       } else {
-        mostrarCarritoConProductos();
+        if (productos.length === 0) {
+          mostrarCarritoVacio();
+        } else {
+          mostrarCarritoConProductos();
+        }
       }
-    }
-  </script>
-  <script>
-  if (!localStorage.getItem("usuarioLogueado")) {
-    window.location.href = "index.html"; // O mostrar modal
-  }
-</script>
-<script src="login.js"></script>
 
-<!-- FIREBASE SDK + FIRESTORE -->
-<script type="module">
-  // Importamos Firebase App y Firestore
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-  // Tu configuración real (copiada de la captura)
-  const firebaseConfig = {
-    apiKey: "AIzaSyB9j5KqbxMFEC88tbZ1ApUWrKqre01TmcA",
-    authDomain: "vitaqronline.firebaseapp.com",
-    projectId: "vitaqronline",
-    storageBucket: "vitaqronline.appspot.com",
-    messagingSenderId: "584669491826",
-    appId: "1:584669491826:web:484adb09e2d80e1c8bbc8eb",
-    measurementId: "G-2B7W7TL32N"
-  };
-
-  // Inicializa Firebase y Firestore
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-
-  // Enviar formulario y guardar en Firestore
-  const form = document.getElementById("registro-form");
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const formData = new FormData(form);
-    const datos = {};
-    formData.forEach((valor, clave) => {
-      datos[clave] = valor;
+      window.pagar = function() {
+        alert("✅ Compra realizada con éxito. Gracias por confiar en VitaQR.");
+        localStorage.removeItem("carrito");
+        location.reload();
+      };
     });
-
-    try {
-      const docRef = await addDoc(collection(db, "usuarios"), datos);
-      localStorage.setItem("usuarioID", docRef.id);
-      alert("Registro exitoso ✅");
-      window.location.href = "perfil.html";
-    } catch (error) {
-      console.error("Error al guardar:", error);
-      alert("Hubo un error al guardar tus datos.");
-    }
-  });
-</script>
-
+  </script>
 </body>
 </html>

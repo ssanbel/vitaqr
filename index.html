@@ -1,205 +1,4 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <title>Inicio - VitaQR</title>
-  <link rel="stylesheet" href="./index.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    body {
-      margin: 0;
-      font-family: Helvetica, sans-serif;
-    }
-
-    .main-header {
-      background-color: #EDEEE9;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-
-    .header-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 10px 40px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .logo img {
-      height: 45px;
-      display: block;
-    }
-
-    .navbar {
-      flex: 1;
-      display: flex;
-      justify-content: flex-end;
-    }
-
-    .menu {
-      display: flex;
-      list-style: none;
-      gap: 30px;
-      align-items: center;
-      margin: 0;
-      padding: 0;
-    }
-
-    .menu a {
-      text-decoration: none;
-      color: #284667;
-      font-weight: bold;
-      transition: 0.2s ease;
-    }
-
-    .menu a:hover {
-      color: #AA443F;
-    }
-
-    .menu i {
-      font-size: 18px;
-    }
-
-    .menu-toggle {
-      display: none;
-      font-size: 26px;
-      color: #284667;
-      cursor: pointer;
-    }
-
-    @media (max-width: 768px) {
-      .navbar {
-        display: none;
-        position: absolute;
-        top: 60px;
-        right: 20px;
-        background-color: #EDEEE9;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        padding: 15px;
-        z-index: 1001;
-      }
-
-      .navbar.active {
-        display: block;
-      }
-
-      .navbar .menu {
-        flex-direction: column;
-        gap: 15px;
-      }
-
-      .menu-toggle {
-        display: block;
-      }
-    }
-
-    .hero {
-      background: url('./img/banner-salud.jpg') no-repeat center center/cover;
-      color: white;
-      padding: 100px 20px;
-      text-align: left;
-    }
-
-    .hero-text {
-      max-width: 600px;
-      background-color: rgba(0,0,0,0.5);
-      padding: 20px;
-      border-radius: 10px;
-    }
-
-    .benefits {
-      padding: 60px 20px;
-      text-align: center;
-    }
-
-    .cards {
-      display: flex;
-      justify-content: center;
-      gap: 40px;
-      flex-wrap: wrap;
-      margin-top: 30px;
-    }
-
-    .card {
-      background-color: #f9f9f9;
-      padding: 20px;
-      border-radius: 10px;
-      max-width: 400px;
-      text-align: left;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-
-    .footer {
-      background-color: #f2f2f2;
-      padding: 15px;
-      text-align: center;
-      font-size: 14px;
-    }
-
-    .footer a {
-      margin-left: 10px;
-      text-decoration: none;
-      color: #AA443F;
-    }
-
-    /* Modal */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1002;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgba(0,0,0,0.5);
-    }
-
-    .modal-content {
-      background-color: #fff;
-      margin: 10% auto;
-      padding: 20px;
-      border-radius: 10px;
-      width: 90%;
-      max-width: 400px;
-    }
-
-    .close {
-      float: right;
-      font-size: 24px;
-      cursor: pointer;
-    }
-
-    .btn {
-      background-color: #284667;
-      color: #fff;
-      padding: 10px;
-      border: none;
-      margin-top: 10px;
-      width: 100%;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    .btn:hover {
-      background-color: #AA443F;
-    }
-
-    input[type="email"],
-    input[type="password"] {
-      width: 100%;
-      padding: 8px;
-      margin-top: 5px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-  </style>
-</head>
+<!-- ... (tu <head> queda igual) ... -->
 <body>
   <!-- Header -->
   <header class="main-header">
@@ -212,7 +11,9 @@
           <li><a href="./index.html">Inicio</a></li>
           <li><a href="./productos.html">Productos</a></li>
           <li><a href="./preguntas-frecuentes.html">Preguntas Frecuentes</a></li>
-          <li><a href="#" id="abrirSesion" title="Iniciar sesión"><i class="fas fa-user"></i></a></li>
+          <li><a href="./perfil.html" id="usuarioNombre" style="display:none;"><i class="fas fa-user"></i> <span id="nombreUsuarioSpan"></span></a></li>
+          <li><a href="#" id="abrirSesion" title="Iniciar sesión"><i class="fas fa-sign-in-alt"></i></a></li>
+          <li><a href="#" id="cerrarSesion" style="display:none;" title="Cerrar sesión"><i class="fas fa-sign-out-alt"></i></a></li>
           <li><a href="./carrito.html" title="Carrito"><i class="fas fa-shopping-cart"></i></a></li>
         </ul>
       </nav>
@@ -272,9 +73,34 @@
     const closeBtn = document.querySelector(".close");
     const loginForm = document.getElementById("loginForm");
     const abrirSesion = document.getElementById("abrirSesion");
+    const cerrarSesion = document.getElementById("cerrarSesion");
+    const usuarioNombre = document.getElementById("usuarioNombre");
+    const nombreUsuarioSpan = document.getElementById("nombreUsuarioSpan");
     const toggle = document.getElementById("menu-toggle");
     const navbar = document.getElementById("navbar");
 
+    // Mostrar u ocultar elementos según sesión
+    document.addEventListener("DOMContentLoaded", () => {
+      const usuario = JSON.parse(localStorage.getItem("usuarioLogueado"));
+
+      if (usuario) {
+        nombreUsuarioSpan.textContent = usuario.nombre || usuario.email;
+        usuarioNombre.style.display = "inline-block";
+        cerrarSesion.style.display = "inline-block";
+        abrirSesion.style.display = "none";
+
+        cerrarSesion.onclick = () => {
+          localStorage.removeItem("usuarioLogueado");
+          location.reload();
+        };
+      } else {
+        abrirSesion.style.display = "inline-block";
+        cerrarSesion.style.display = "none";
+        usuarioNombre.style.display = "none";
+      }
+    });
+
+    // Mostrar modal
     abrirSesion.onclick = () => {
       modal.style.display = "block";
     };
@@ -289,23 +115,29 @@
       }
     };
 
+    // Enviar login
     loginForm.onsubmit = (e) => {
       e.preventDefault();
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
+
       if (email && password) {
-        localStorage.setItem("usuarioLogueado", email);
+        const usuario = {
+          email: email,
+          nombre: "Usuario" // Aquí podrías agregar más datos si vienen del formulario
+        };
+        localStorage.setItem("usuarioLogueado", JSON.stringify(usuario));
         modal.style.display = "none";
-        window.location.href = "./registro.html";
+        window.location.href = "perfil.html";
       } else {
         alert("Por favor, completa todos los campos.");
       }
     };
 
+    // Toggle menú
     toggle.onclick = () => {
       navbar.classList.toggle("active");
     };
   </script>
-  <script src="auth.js"></script>
 </body>
 </html>

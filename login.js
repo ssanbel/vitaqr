@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Guardar sesión en localStorage como objeto
         const usuario = {
           email: email,
-          nombre: "Usuario" // Aquí podrías usar un campo de nombre si lo tienes
+          nombre: "Usuario" // Cambia esto si tienes un campo de nombre
         };
 
         localStorage.setItem("usuarioLogueado", JSON.stringify(usuario));
@@ -45,5 +45,24 @@ document.addEventListener("DOMContentLoaded", () => {
         alert("Completa todos los campos.");
       }
     };
+  }
+
+  // Mostrar nombre/correo del usuario en el menú
+  const usuarioData = localStorage.getItem("usuarioLogueado");
+  if (usuarioData) {
+    const usuario = JSON.parse(usuarioData);
+    const nombreElemento = document.getElementById("usuarioNombre");
+    if (nombreElemento) {
+      nombreElemento.innerHTML = `<i class="fas fa-user"></i> ${usuario.nombre || usuario.email}`;
+    }
+
+    // Activar botón de cerrar sesión
+    const cerrarBtn = document.getElementById("cerrarSesion");
+    if (cerrarBtn) {
+      cerrarBtn.onclick = () => {
+        localStorage.removeItem("usuarioLogueado");
+        window.location.href = "index.html";
+      };
+    }
   }
 });

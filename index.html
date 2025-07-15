@@ -9,6 +9,7 @@
     body {
       margin: 0;
       font-family: Helvetica, sans-serif;
+      background-color: #EDEEE9;
     }
 
     .main-header {
@@ -201,146 +202,124 @@
   </style>
 </head>
 <body>
-<!-- ... (tu <head> queda igual) ... -->
-<body>
-  <!-- Header -->
-  <header class="main-header">
-    <div class="header-container">
-      <a href="./index.html" class="logo">
-        <img src="./img/logo-vitaqr.png" alt="VitaQR Logo">
-      </a>
-      <nav class="navbar" id="navbar">
-        <ul class="menu">
-          <li><a href="./index.html">Inicio</a></li>
-          <li><a href="./productos.html">Productos</a></li>
-          <li><a href="./preguntas-frecuentes.html">Preguntas Frecuentes</a></li>
-          <li><a href="./perfil.html" id="usuarioNombre" style="display:none;"><i class="fas fa-user"></i> <span id="nombreUsuarioSpan"></span></a></li>
-          <li><a href="#" id="abrirSesion" title="Iniciar sesión"><i class="fas fa-sign-in-alt"></i></a></li>
-          <li><a href="#" id="cerrarSesion" style="display:none;" title="Cerrar sesión"><i class="fas fa-sign-out-alt"></i></a></li>
-          <li><a href="./carrito.html" title="Carrito"><i class="fas fa-shopping-cart"></i></a></li>
-        </ul>
-      </nav>
-      <div class="menu-toggle" id="menu-toggle">
-        <i class="fas fa-bars"></i>
-      </div>
-    </div>
-  </header>
 
-  <!-- Banner -->
-  <section class="hero">
-    <div class="hero-text">
-      <h1>Tu salud, en un solo código</h1>
-      <p>VitaQR almacena tu información médica para emergencias. Seguro, rápido y siempre contigo.</p>
-    </div>
-  </section>
-
-  <!-- Sección de información -->
-  <section class="benefits">
-    <h2>¿Quiénes somos?</h2>
-    <div class="cards">
-      <div class="card">
-        <h3>VITAQR</h3>
-        <p>En VITAQR, nos apasiona transformar la manera en que compartimos información y experiencias a través de soluciones inteligentes y sostenibles.</p>
-      </div>
-      <div class="card">
-        <h3>MISIÓN</h3>
-        <p>Nuestra misión es facilitar la conexión entre el mundo físico y digital mediante códigos QR personalizados, brindando acceso rápido, práctico y seguro a tus datos más importantes.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <p>© 2025 VitaQR - Proyecto Académico</p>
-    <a href="./terminos-condiciones.html">Términos y Condiciones</a>
-  </footer>
-
-  <!-- Modal de inicio de sesión -->
-  <div id="loginModal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <h2>Inicia sesión</h2>
-      <form id="loginForm">
-        <label for="email">Correo electrónico:</label>
-        <input type="email" id="email" required>
-        <label for="password">Contraseña:</label>
-        <input type="password" id="password" required>
-        <button type="submit" class="btn">Iniciar sesión</button>
-      </form>
+<!-- CABECERA -->
+<header class="main-header">
+  <div class="header-container">
+    <a href="./index.html" class="logo">
+      <img src="./img/logo-vitaqr.png" alt="VitaQR Logo">
+    </a>
+    <nav class="navbar" id="navbar">
+      <ul class="menu">
+        <li><a href="index.html" class="active">Inicio</a></li>
+        <li><a href="productos.html">Productos</a></li>
+        <li><a href="preguntas-frecuentes.html">Preguntas Frecuentes</a></li>
+        <li><a href="perfil.html" id="usuarioNombre" style="display:none;"><i class="fas fa-user"></i> <span id="nombreUsuarioSpan"></span></a></li>
+        <li><a href="#" id="abrirSesion" title="Iniciar sesión"><i class="fas fa-sign-in-alt"></i></a></li>
+        <li><a href="#" id="cerrarSesion" style="display:none;" title="Cerrar sesión"><i class="fas fa-sign-out-alt"></i></a></li>
+        <li><a href="carrito.html" title="Carrito"><i class="fas fa-shopping-cart"></i></a></li>
+      </ul>
+    </nav>
+    <div class="menu-toggle" id="menu-toggle">
+      <i class="fas fa-bars"></i>
     </div>
   </div>
+</header>
 
-  <!-- Script -->
-  <script>
-    const modal = document.getElementById("loginModal");
-    const closeBtn = document.querySelector(".close");
-    const loginForm = document.getElementById("loginForm");
-    const abrirSesion = document.getElementById("abrirSesion");
-    const cerrarSesion = document.getElementById("cerrarSesion");
-    const usuarioNombre = document.getElementById("usuarioNombre");
-    const nombreUsuarioSpan = document.getElementById("nombreUsuarioSpan");
-    const toggle = document.getElementById("menu-toggle");
-    const navbar = document.getElementById("navbar");
+<!-- BANNER -->
+<section class="hero">
+  <div class="hero-text">
+    <h1>Tu salud, en un solo código</h1>
+    <p>VitaQR almacena tu información médica para emergencias. Seguro, rápido y siempre contigo.</p>
+  </div>
+</section>
 
-    // Mostrar u ocultar elementos según sesión
-    document.addEventListener("DOMContentLoaded", () => {
-      const usuario = JSON.parse(localStorage.getItem("usuarioLogueado"));
+<!-- CONTENIDO PRINCIPAL -->
+<section class="benefits">
+  <h2>¿Quiénes somos?</h2>
+  <div class="cards">
+    <div class="card">
+      <h3>VITAQR</h3>
+      <p>En VITAQR, nos apasiona transformar la manera en que compartimos información y experiencias a través de soluciones inteligentes y sostenibles.</p>
+    </div>
+    <div class="card">
+      <h3>MISIÓN</h3>
+      <p>Nuestra misión es facilitar la conexión entre el mundo físico y digital mediante códigos QR personalizados, brindando acceso rápido, práctico y seguro a tus datos más importantes.</p>
+    </div>
+  </div>
+</section>
 
-      if (usuario) {
-        nombreUsuarioSpan.textContent = usuario.nombre || usuario.email;
-        usuarioNombre.style.display = "inline-block";
-        cerrarSesion.style.display = "inline-block";
-        abrirSesion.style.display = "none";
+<!-- FOOTER -->
+<footer class="footer">
+  <p>© 2025 VitaQR - Proyecto Académico</p>
+  <a href="./terminos-condiciones.html">Términos y Condiciones</a>
+</footer>
 
-        cerrarSesion.onclick = () => {
-          localStorage.removeItem("usuarioLogueado");
-          location.reload();
-        };
-      } else {
-        abrirSesion.style.display = "inline-block";
-        cerrarSesion.style.display = "none";
-        usuarioNombre.style.display = "none";
-      }
-    });
+<!-- MODAL LOGIN -->
+<div id="loginModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>Inicia sesión</h2>
+    <form id="loginForm">
+      <label for="email">Correo electrónico:</label>
+      <input type="email" id="email" required>
+      <label for="password">Contraseña:</label>
+      <input type="password" id="password" required>
+      <button type="submit" class="btn">Iniciar sesión</button>
+    </form>
+  </div>
+</div>
 
-    // Mostrar modal
-    abrirSesion.onclick = () => {
-      modal.style.display = "block";
-    };
+<!-- SCRIPT -->
+<script>
+  const modal = document.getElementById("loginModal");
+  const closeBtn = document.querySelector(".close");
+  const loginForm = document.getElementById("loginForm");
+  const abrirSesion = document.getElementById("abrirSesion");
+  const cerrarSesion = document.getElementById("cerrarSesion");
+  const usuarioNombre = document.getElementById("usuarioNombre");
+  const nombreUsuarioSpan = document.getElementById("nombreUsuarioSpan");
+  const toggle = document.getElementById("menu-toggle");
+  const navbar = document.getElementById("navbar");
 
-    closeBtn.onclick = () => {
+  document.addEventListener("DOMContentLoaded", () => {
+    const usuario = JSON.parse(localStorage.getItem("usuarioLogueado"));
+    if (usuario) {
+      nombreUsuarioSpan.textContent = usuario.nombre || usuario.email;
+      usuarioNombre.style.display = "inline-block";
+      cerrarSesion.style.display = "inline-block";
+      abrirSesion.style.display = "none";
+      cerrarSesion.onclick = () => {
+        localStorage.removeItem("usuarioLogueado");
+        location.reload();
+      };
+    } else {
+      abrirSesion.style.display = "inline-block";
+      cerrarSesion.style.display = "none";
+      usuarioNombre.style.display = "none";
+    }
+  });
+
+  abrirSesion.onclick = () => modal.style.display = "block";
+  closeBtn.onclick = () => modal.style.display = "none";
+  window.onclick = (e) => { if (e.target === modal) modal.style.display = "none"; };
+
+  loginForm.onsubmit = (e) => {
+    e.preventDefault();
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    if (email && password) {
+      const usuario = { email, nombre: "Usuario" };
+      localStorage.setItem("usuarioLogueado", JSON.stringify(usuario));
       modal.style.display = "none";
-    };
+      window.location.href = "perfil.html";
+    } else {
+      alert("Por favor, completa todos los campos.");
+    }
+  };
 
-    window.onclick = (e) => {
-      if (e.target === modal) {
-        modal.style.display = "none";
-      }
-    };
+  toggle.onclick = () => navbar.classList.toggle("active");
+</script>
 
-    // Enviar login
-    loginForm.onsubmit = (e) => {
-      e.preventDefault();
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-
-      if (email && password) {
-        const usuario = {
-          email: email,
-          nombre: "Usuario" // Aquí podrías agregar más datos si vienen del formulario
-        };
-        localStorage.setItem("usuarioLogueado", JSON.stringify(usuario));
-        modal.style.display = "none";
-        window.location.href = "perfil.html";
-      } else {
-        alert("Por favor, completa todos los campos.");
-      }
-    };
-
-    // Toggle menú
-    toggle.onclick = () => {
-      navbar.classList.toggle("active");
-    };
-  </script>
 </body>
 </html>

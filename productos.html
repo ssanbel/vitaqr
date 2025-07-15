@@ -7,6 +7,12 @@
   <link rel="stylesheet" href="index.css">
   <link rel="stylesheet" href="productos.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    #nombreUsuarioNav {
+      font-size: 12px;
+      margin-left: 5px;
+    }
+  </style>
 </head>
 <body>
 
@@ -22,7 +28,6 @@
       <input type="password" id="password" required>
       <button type="submit" class="btn">Iniciar sesión</button>
     </form>
-   
   </div>
 </div>
 
@@ -35,7 +40,11 @@
         <li><a href="index.html">Inicio</a></li>
         <li><a href="productos.html" class="active">Productos</a></li>
         <li><a href="preguntas-frecuentes.html">Preguntas Frecuentes</a></li>
-        <li><a href="#" id="abrirSesion" title="Iniciar sesión"><i class="fas fa-user"></i></a></li>
+        <li>
+          <a href="#" id="abrirSesion" title="Iniciar sesión">
+            <i class="fas fa-user"></i> <span id="nombreUsuarioNav"></span>
+          </a>
+        </li>
         <li><a href="carrito.html" title="Carrito"><i class="fas fa-shopping-cart"></i></a></li>
       </ul>
     </nav>
@@ -61,22 +70,18 @@
   <section class="productos-main">
     <h1>Nuestros Productos</h1>
     <div class="productos-grid">
-
       <div class="producto" onclick="mostrarDetalle('producto1')">
         <img src="img/stickers.jpeg" alt="Sticker con QR">
         <div class="overlay">Sticker con QR</div>
       </div>
-
       <div class="producto" onclick="mostrarDetalle('producto2')">
         <img src="img/case.jpeg" alt="Case con QR">
         <div class="overlay">Case con QR</div>
       </div>
-
       <div class="producto" onclick="mostrarDetalle('producto3')">
         <img src="img/collar.jpeg" alt="Collar con QR">
         <div class="overlay">Collar con QR</div>
       </div>
-
     </div>
 
     <!-- Detalle del producto -->
@@ -96,58 +101,54 @@
 </footer>
 
 <script src="productos.js"></script>
+<script src="login.js"></script>
+<script src="auth.js"></script>
 
 <script>
   const modal = document.getElementById("loginModal");
   const closeBtn = document.querySelector(".close");
-  const loginForm = document.getElementById("loginForm");
-  const gmailBtn = document.getElementById("gmailLogin");
   const abrirSesion = document.getElementById("abrirSesion");
+  const nombreUsuarioNav = document.getElementById("nombreUsuarioNav");
 
-  abrirSesion.onclick = () => {
-    modal.style.display = "block";
-  };
+  const sesion = JSON.parse(localStorage.getItem("usuarioLogueado"));
+  if (sesion) {
+    nombreUsuarioNav.textContent = sesion.nombre || sesion.email || sesion;
+    abrirSesion.href = "perfil.html";
+  }
 
-  closeBtn.onclick = () => {
-    modal.style.display = "none";
-  };
-
-  window.onclick = (e) => {
-    if (e.target == modal) {
-      modal.style.display = "none";
+  abrirSesion.onclick = (e) => {
+    if (!localStorage.getItem("usuarioLogueado")) {
+      e.preventDefault();
+      modal.style.display = "block";
     }
   };
 
+  closeBtn.onclick = () => modal.style.display = "none";
+  window.onclick = (e) => {
+    if (e.target == modal) modal.style.display = "none";
+  };
+
+  const loginForm = document.getElementById("loginForm");
   loginForm.onsubmit = (e) => {
     e.preventDefault();
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
     if (email && password) {
-      localStorage.setItem("usuarioLogueado", email);
+      const usuario = { email, nombre: "Usuario" };
+      localStorage.setItem("usuarioLogueado", JSON.stringify(usuario));
       modal.style.display = "none";
+      window.location.href = "perfil.html";
     } else {
       alert("Por favor, completa todos los campos.");
     }
   };
+</script>
 
-  gmailBtn.onclick = () => {
-    localStorage.setItem("usuarioLogueado", "gmail_user@gmail.com");
-    modal.style.display = "none";
-  };
-</script>
-<script>
-  if (!localStorage.getItem("usuarioLogueado")) {
-    window.location.href = "index.html"; // O mostrar modal
-  }
-</script>
-<script src="login.js"></script>
 <!-- FIREBASE SDK + FIRESTORE -->
 <script type="module">
-  // Importamos Firebase App y Firestore
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-  // Tu configuración real (copiada de la captura)
   const firebaseConfig = {
     apiKey: "AIzaSyB9j5KqbxMFEC88tbZ1ApUWrKqre01TmcA",
     authDomain: "vitaqronline.firebaseapp.com",
@@ -158,34 +159,31 @@
     measurementId: "G-2B7W7TL32N"
   };
 
-  // Inicializa Firebase y Firestore
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  // Enviar formulario y guardar en Firestore
   const form = document.getElementById("registro-form");
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+  if (form) {
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const datos = {};
+      formData.forEach((valor, clave) => {
+        datos[clave] = valor;
+      });
 
-    const formData = new FormData(form);
-    const datos = {};
-    formData.forEach((valor, clave) => {
-      datos[clave] = valor;
+      try {
+        const docRef = await addDoc(collection(db, "usuarios"), datos);
+        localStorage.setItem("usuarioID", docRef.id);
+        alert("Registro exitoso ✅");
+        window.location.href = "perfil.html";
+      } catch (error) {
+        console.error("Error al guardar:", error);
+        alert("Hubo un error al guardar tus datos.");
+      }
     });
-
-    try {
-      const docRef = await addDoc(collection(db, "usuarios"), datos);
-      localStorage.setItem("usuarioID", docRef.id);
-      alert("Registro exitoso ✅");
-      window.location.href = "perfil.html";
-    } catch (error) {
-      console.error("Error al guardar:", error);
-      alert("Hubo un error al guardar tus datos.");
-    }
-  });
+  }
 </script>
-
-<script src="auth.js"></script>
 
 </body>
 </html>

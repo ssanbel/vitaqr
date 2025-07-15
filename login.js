@@ -5,16 +5,41 @@ document.addEventListener("DOMContentLoaded", () => {
   const loginForm = document.getElementById("loginForm");
 
   if (abrirSesion && modal && loginForm) {
-    abrirSesion.onclick = () => modal.style.display = "block";
-    closeBtn.onclick = () => modal.style.display = "none";
-    window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; };
+    // Abrir modal
+    abrirSesion.onclick = () => {
+      modal.style.display = "block";
+    };
 
+    // Cerrar modal al hacer clic en la X
+    closeBtn.onclick = () => {
+      modal.style.display = "none";
+    };
+
+    // Cerrar modal al hacer clic fuera del contenido
+    window.onclick = (e) => {
+      if (e.target === modal) {
+        modal.style.display = "none";
+      }
+    };
+
+    // Procesar formulario de inicio de sesión
     loginForm.onsubmit = (e) => {
       e.preventDefault();
+
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
+
       if (email && password) {
-        localStorage.setItem("usuarioLogueado", email);
+        // Guardar sesión en localStorage como objeto
+        const usuario = {
+          email: email,
+          nombre: "Usuario" // Aquí podrías usar un campo de nombre si lo tienes
+        };
+
+        localStorage.setItem("usuarioLogueado", JSON.stringify(usuario));
+
+        // Redirigir al perfil
+        modal.style.display = "none";
         window.location.href = "perfil.html";
       } else {
         alert("Completa todos los campos.");

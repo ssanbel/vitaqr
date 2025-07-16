@@ -37,8 +37,73 @@
   <main class="registro-container">
     <h1>Registro de Información Médica</h1>
     <form id="registro-form" novalidate>
-      <!-- Todos los fieldsets iguales, sin required -->
-      <!-- ... OMITIDO POR BREVEDAD (ya están en tu HTML original) ... -->
+      <fieldset>
+        <legend>Datos Personales</legend>
+        <label>Nombres: <input type="text" name="nombres" required></label>
+        <label>Apellidos: <input type="text" name="apellidos" required></label>
+        <label>DNI: <input type="text" name="dni" required></label>
+        <label>Edad: <input type="number" name="edad" required></label>
+        <label>Sexo:
+          <select name="sexo" required>
+            <option value="">Selecciona</option>
+            <option>Femenino</option>
+            <option>Masculino</option>
+            <option>Otro</option>
+          </select>
+        </label>
+        <label>Estado Civil: <input type="text" name="estado_civil" required></label>
+        <label>Religión: <input type="text" name="religion" required></label>
+        <label>Tipo de Sangre: <input type="text" name="sangre" required></label>
+        <label>Fecha de Nacimiento: <input type="date" name="nacimiento" required></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Contacto de Emergencia</legend>
+        <label>Nombre del Contacto: <input type="text" name="nombre_contacto" required></label>
+        <label>Teléfono de Contacto: <input type="tel" name="telefono_contacto" required></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Información Médica General</legend>
+        <label>Peso (kg): <input type="number" name="peso" required></label>
+        <label>Altura (cm): <input type="number" name="altura" required></label>
+        <label>Alergias: <input type="text" name="alergias" required></label>
+        <label>Condiciones: <input type="text" name="condiciones" required></label>
+        <label>Cirugías: <input type="text" name="cirugias" required></label>
+        <label>Vacunas: <input type="text" name="vacunas" required></label>
+        <label>Seguro: <input type="text" name="seguro" required></label>
+        <label>Clínica: <input type="text" name="clinica" required></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Medicamentos</legend>
+        <label>Medicamentos Continuos: <input type="text" name="med_continuos" required></label>
+        <label>Medicamentos Emergencia: <input type="text" name="med_emergencia" required></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Historial Familiar</legend>
+        <label>Antecedentes de Alergia: <input type="text" name="antecedentes_alergia" required></label>
+        <label>Enfermedades Hereditarias: <input type="text" name="enfermedades_hereditarias" required></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Estilo de Vida</legend>
+        <label>¿Fuma?
+          <select name="fuma" required>
+            <option value="">Selecciona</option>
+            <option>Sí</option>
+            <option>No</option>
+          </select>
+        </label>
+        <label>¿Bebe?
+          <select name="bebe" required>
+            <option value="">Selecciona</option>
+            <option>Sí</option>
+            <option>No</option>
+          </select>
+        </label>
+      </fieldset>
 
       <button type="submit" class="btn">Guardar Información</button>
     </form>
@@ -77,7 +142,7 @@
     window.addEventListener("DOMContentLoaded", () => {
       const datosGuardados = JSON.parse(localStorage.getItem("datosUsuario") || "{}");
       for (const clave in datosGuardados) {
-        if (form.elements[clave] && clave !== "fotoBase64") {
+        if (form.elements[clave]) {
           form.elements[clave].value = datosGuardados[clave];
         }
       }
@@ -110,20 +175,6 @@
         datos[clave] = valor;
       });
 
-      const fotoInput = form.elements["foto"];
-      if (fotoInput.files.length > 0) {
-        const reader = new FileReader();
-        reader.onload = async () => {
-          datos.fotoBase64 = reader.result;
-          await guardarDatos(datos);
-        };
-        reader.readAsDataURL(fotoInput.files[0]);
-      } else {
-        await guardarDatos(datos);
-      }
-    });
-
-    async function guardarDatos(datos) {
       try {
         const docRef = await addDoc(collection(db, "usuarios"), datos);
         localStorage.setItem("usuarioID", docRef.id);
@@ -134,7 +185,7 @@
         console.error("Error al guardar en Firestore:", error);
         alert("Error al guardar los datos.");
       }
-    }
+    });
   </script>
 </body>
 </html>

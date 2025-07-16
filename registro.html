@@ -9,8 +9,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 <body>
-
-  <!-- Cabecera moderna igual que en index.html -->
   <header class="main-header">
     <div class="header-container">
       <a href="index.html" class="logo">
@@ -31,79 +29,71 @@
     </div>
   </header>
 
-  <!-- Formulario de registro -->
   <main class="registro-container">
     <h1>Registro de Información Médica</h1>
-    
     <form id="registro-form">
-      <!-- Datos Personales -->
       <fieldset>
         <legend>Datos Personales</legend>
-        <label>Nombres: <input type="text" name="nombres" required></label>
-        <label>Apellidos: <input type="text" name="apellidos" required></label>
-        <label>DNI: <input type="text" name="dni" required></label>
-        <label>Edad: <input type="number" name="edad" required></label>
+        <label>Nombres: <input type="text" name="nombres"></label>
+        <label>Apellidos: <input type="text" name="apellidos"></label>
+        <label>DNI: <input type="text" name="dni"></label>
+        <label>Edad: <input type="number" name="edad"></label>
         <label>Sexo:
-          <select name="sexo" required>
+          <select name="sexo">
             <option value="">Selecciona</option>
             <option>Femenino</option>
             <option>Masculino</option>
             <option>Otro</option>
           </select>
         </label>
-        <label>Estado Civil: <input type="text" name="estado_civil" required></label>
-        <label>Religión: <input type="text" name="religion" required></label>
-        <label>Tipo de Sangre: <input type="text" name="sangre" required></label>
-        <label>Fecha de Nacimiento: <input type="date" name="nacimiento" required></label>
+        <label>Estado Civil: <input type="text" name="estado_civil"></label>
+        <label>Religión: <input type="text" name="religion"></label>
+        <label>Tipo de Sangre: <input type="text" name="sangre"></label>
+        <label>Fecha de Nacimiento: <input type="date" name="nacimiento"></label>
         <label>Foto de Perfil: <input type="file" name="foto" accept="image/*"></label>
       </fieldset>
 
-      <!-- Contacto Emergencia -->
       <fieldset>
         <legend>Contacto de Emergencia</legend>
-        <label>Nombre del Contacto: <input type="text" name="nombre_contacto" required></label>
-        <label>Teléfono de Contacto: <input type="tel" name="telefono_contacto" required></label>
+        <label>Nombre del Contacto: <input type="text" name="nombre_contacto"></label>
+        <label>Teléfono de Contacto: <input type="tel" name="telefono_contacto"></label>
       </fieldset>
 
-      <!-- Info Médica -->
       <fieldset>
         <legend>Información Médica General</legend>
-        <label>Peso (kg): <input type="number" name="peso" required></label>
-        <label>Altura (cm): <input type="number" name="altura" required></label>
-        <label>Alergias: <input type="text" name="alergias" required></label>
-        <label>Condiciones: <input type="text" name="condiciones" required></label>
-        <label>Cirugías: <input type="text" name="cirugias" required></label>
-        <label>Vacunas: <input type="text" name="vacunas" required></label>
-        <label>Seguro: <input type="text" name="seguro" required></label>
-        <label>Clínica: <input type="text" name="clinica" required></label>
+        <label>Peso (kg): <input type="number" name="peso"></label>
+        <label>Altura (cm): <input type="number" name="altura"></label>
+        <label>Alergias: <input type="text" name="alergias"></label>
+        <label>Condiciones: <input type="text" name="condiciones"></label>
+        <label>Cirugías: <input type="text" name="cirugias"></label>
+        <label>Vacunas: <input type="text" name="vacunas"></label>
+        <label>Seguro: <input type="text" name="seguro"></label>
+        <label>Clínica: <input type="text" name="clinica"></label>
       </fieldset>
 
-      <!-- Medicamentos -->
       <fieldset>
         <legend>Medicamentos</legend>
-        <label>Medicamentos Continuos: <input type="text" name="med_continuos" required></label>
-        <label>Medicamentos Emergencia: <input type="text" name="med_emergencia" required></label>
+        <label>Medicamentos Continuos: <input type="text" name="med_continuos"></label>
+        <label>Medicamentos Emergencia: <input type="text" name="med_emergencia"></label>
       </fieldset>
 
-      <!-- Historial Familiar -->
       <fieldset>
         <legend>Historial Familiar</legend>
-        <label>Antecedentes de Alergia: <input type="text" name="antecedentes_alergia" required></label>
-        <label>Enfermedades Hereditarias: <input type="text" name="enfermedades_hereditarias" required></label>
+        <label>Antecedentes de Alergia: <input type="text" name="antecedentes_alergia"></label>
+        <label>Enfermedades Hereditarias: <input type="text" name="enfermedades_hereditarias"></label>
       </fieldset>
 
-      <!-- Estilo de Vida -->
       <fieldset>
         <legend>Estilo de Vida</legend>
         <label>¿Fuma?
-          <select name="fuma" required>
+          <select name="fuma">
             <option value="">Selecciona</option>
             <option>Sí</option>
             <option>No</option>
           </select>
         </label>
         <label>¿Bebe?
-          <select name="bebe" required>
+          <select name="bebe">
             <option value="">Selecciona</option>
             <option>Sí</option>
             <option>No</option>
@@ -111,11 +101,10 @@
         </label>
       </fieldset>
 
-      <!-- Diagnóstico PDF -->
       <fieldset>
         <legend>Diagnóstico Médico</legend>
         <label>Adjuntar diagnóstico (PDF): 
-          <input type="file" name="diagnostico_pdf" accept="application/pdf" required>
+          <input type="file" name="diagnostico_pdf" accept="application/pdf">
         </label>
       </fieldset>
 
@@ -123,7 +112,6 @@
     </form>
   </main>
 
-  <!-- Footer -->
   <footer class="footer">
     <div class="footer-content">
       <p>© 2025 VitaQR - Proyecto Académico</p>
@@ -131,24 +119,7 @@
     </div>
   </footer>
 
-  <!-- Modal de sesión -->
-  <div id="loginModal" class="modal" style="display: none;">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <h2>Inicia sesión</h2>
-      <form id="loginForm">
-        <label for="email">Correo electrónico:</label>
-        <input type="email" id="email" required>
-        <label for="password">Contraseña:</label>
-        <input type="password" id="password" required>
-        <button type="submit" class="btn">Iniciar sesión</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Scripts -->
   <script>
-    // Redirección si no hay sesión
     if (!localStorage.getItem("usuarioLogueado")) {
       window.location.href = "index.html";
     }
@@ -160,19 +131,15 @@
       const formData = new FormData(form);
       const datos = {};
 
-      // Convertir todos los campos a objeto
       for (const [clave, valor] of formData.entries()) {
         datos[clave] = valor;
       }
 
-      // Convertir la foto a base64 si fue cargada
       const fotoInput = form.elements["foto"];
       if (fotoInput.files.length > 0) {
         const reader = new FileReader();
         reader.onload = function () {
           datos.fotoBase64 = reader.result;
-
-          // Guardar todo en localStorage
           localStorage.setItem("datosUsuario", JSON.stringify(datos));
           window.location.href = "perfil.html";
         };
@@ -183,7 +150,6 @@
       }
     });
 
-    // Precargar datos si existen
     window.addEventListener("DOMContentLoaded", () => {
       const datosGuardados = JSON.parse(localStorage.getItem("datosUsuario") || "{}");
       for (const clave in datosGuardados) {
@@ -192,84 +158,44 @@
         }
       }
     });
-
-    // Modal login funcional
-    const modal = document.getElementById("loginModal");
-    const closeBtn = document.querySelector(".close");
-    const loginForm = document.getElementById("loginForm");
-    const abrirSesion = document.getElementById("abrirSesion");
-    const toggle = document.getElementById("menu-toggle");
-    const navbar = document.getElementById("navbar");
-
-    abrirSesion.onclick = () => modal.style.display = "block";
-    closeBtn.onclick = () => modal.style.display = "none";
-    window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; };
-
-    loginForm.onsubmit = (e) => {
-      e.preventDefault();
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      if (email && password) {
-        localStorage.setItem("usuarioLogueado", email);
-        modal.style.display = "none";
-        window.location.href = "registro.html";
-      }
-    };
-
-    toggle.onclick = () => {
-      navbar.classList.toggle("active");
-    };
   </script>
 
-<script>
-  if (!localStorage.getItem("usuarioLogueado")) {
-    window.location.href = "index.html"; // O mostrar modal
-  }
-</script>
-<script src="login.js"></script>
-<!-- FIREBASE SDK + FIRESTORE -->
-<script type="module">
-  // Importamos Firebase App y Firestore
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-  // Tu configuración real (copiada de la captura)
-  const firebaseConfig = {
-    apiKey: "AIzaSyB9j5KqbxMFEC88tbZ1ApUWrKqre01TmcA",
-    authDomain: "vitaqronline.firebaseapp.com",
-    projectId: "vitaqronline",
-    storageBucket: "vitaqronline.appspot.com",
-    messagingSenderId: "584669491826",
-    appId: "1:584669491826:web:484adb09e2d80e1c8bbc8eb",
-    measurementId: "G-2B7W7TL32N"
-  };
+    const firebaseConfig = {
+      apiKey: "AIzaSyB9j5KqbxMFEC88tbZ1ApUWrKqre01TmcA",
+      authDomain: "vitaqronline.firebaseapp.com",
+      projectId: "vitaqronline",
+      storageBucket: "vitaqronline.appspot.com",
+      messagingSenderId: "584669491826",
+      appId: "1:584669491826:web:484adb09e2d80e1c8bbc8eb",
+      measurementId: "G-2B7W7TL32N"
+    };
 
-  // Inicializa Firebase y Firestore
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-  // Enviar formulario y guardar en Firestore
-  const form = document.getElementById("registro-form");
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+    const form = document.getElementById("registro-form");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const datos = {};
+      formData.forEach((valor, clave) => {
+        datos[clave] = valor;
+      });
 
-    const formData = new FormData(form);
-    const datos = {};
-    formData.forEach((valor, clave) => {
-      datos[clave] = valor;
+      try {
+        const docRef = await addDoc(collection(db, "usuarios"), datos);
+        localStorage.setItem("usuarioID", docRef.id);
+        alert("Registro exitoso ✅");
+        window.location.href = "perfil.html";
+      } catch (error) {
+        console.error("Error al guardar:", error);
+        alert("Hubo un error al guardar tus datos.");
+      }
     });
-
-    try {
-      const docRef = await addDoc(collection(db, "usuarios"), datos);
-      localStorage.setItem("usuarioID", docRef.id);
-      alert("Registro exitoso ✅");
-      window.location.href = "perfil.html";
-    } catch (error) {
-      console.error("Error al guardar:", error);
-      alert("Hubo un error al guardar tus datos.");
-    }
-  });
-</script>
-
+  </script>
 </body>
 </html>

@@ -1,89 +1,167 @@
-<!-- Solo muestro aquí la parte del <script> final corregida -->
-<script>
-  // Verificar sesión
-  const usuario = JSON.parse(localStorage.getItem("usuarioLogueado"));
-  if (!usuario) {
-    window.location.href = "index.html";
-  }
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mi perfil - VitaQR</title>
+  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+</head>
+<body>
+  <!-- Header -->
+  <header class="main-header">
+    <div class="header-container">
+      <a href="index.html" class="logo">
+        <img src="img/logo-vitaqr.png" alt="VitaQR Logo" />
+      </a>
+      <nav class="navbar" id="navbar">
+        <ul class="menu">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="productos.html">Productos</a></li>
+          <li><a href="preguntas-frecuentes.html">Preguntas Frecuentes</a></li>
+          <li><a href="#" id="abrirSesion" title="Iniciar sesión"><i class="fas fa-sign-in-alt"></i></a></li>
+          <li><a href="#" id="cerrarSesion" style="display:none;" title="Cerrar sesión"><i class="fas fa-sign-out-alt"></i></a></li>
+          <li><a href="carrito.html" title="Carrito"><i class="fas fa-shopping-cart"></i></a></li>
+        </ul>
+      </nav>
+      <div class="menu-toggle" id="menu-toggle"><i class="fas fa-bars"></i></div>
+    </div>
+  </header>
 
-  // Mostrar datos del usuario
-  const datos = JSON.parse(localStorage.getItem("datosUsuario")) || {};
-  const datosDiv = document.getElementById("datosUsuario");
+  <!-- Contenido principal -->
+  <main style="padding: 40px 20px; max-width: 900px; margin: auto;">
+    <h1 style="color:#284667;">Perfil del usuario</h1>
+    <div style="display: flex; flex-wrap: wrap; gap: 40px; margin-top: 30px;">
+      <!-- Foto y QR -->
+      <div style="flex: 1; min-width: 250px; text-align: center;">
+        <img id="fotoUsuario" src="img/avatar.png" alt="Foto de perfil" style="width: 180px; height: 180px; border-radius: 50%; object-fit: cover; border: 3px solid #284667;">
+        <div id="qrPreview" style="margin-top: 30px;"></div>
+        <button onclick="descargarQR()" class="btn" style="margin-top: 15px;">Descargar QR</button>
+      </div>
 
-  datosDiv.innerHTML = `
-    <p><strong>Nombre:</strong> ${datos.nombres || "—"}</p>
-    <p><strong>Apellido:</strong> ${datos.apellidos || "—"}</p>
-    <p><strong>DNI:</strong> ${datos.dni || "—"}</p>
-    <p><strong>Correo:</strong> ${usuario.email || "—"}</p>
-  `;
+      <!-- Datos -->
+      <div style="flex: 2; min-width: 250px;">
+        <div id="datosUsuario"></div>
+        <div style="margin-top: 30px;">
+          <a href="registro.html" class="btn">Editar datos</a>
+        </div>
+      </div>
+    </div>
+  </main>
 
-  // Mostrar foto de perfil si existe
-  if (datos.fotoBase64) {
-    document.getElementById("fotoUsuario").src = datos.fotoBase64;
-  }
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© 2025 VitaQR - Proyecto Académico</p>
+    <a href="terminos-condiciones.html">Términos y Condiciones</a>
+  </footer>
 
-  // Generar QR (enlace a página pública)
-  const qrDiv = document.getElementById("qrPreview");
-  QRCode.toDataURL("https://tusitio.com/qr-info.html", { width: 150 }, (err, url) => {
-    if (!err) {
-      const img = new Image();
-      img.src = url;
-      img.alt = "Código QR";
-      qrDiv.appendChild(img);
-      localStorage.setItem("qrGenerado", url);
+  <!-- Modal login -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Inicia sesión</h2>
+      <form id="loginForm">
+        <label for="email">Correo electrónico:</label>
+        <input type="email" id="email" required>
+        <label for="password">Contraseña:</label>
+        <input type="password" id="password" required>
+        <button type="submit" class="btn">Iniciar sesión</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Script -->
+  <script>
+    // Verificar sesión
+    const usuario = JSON.parse(localStorage.getItem("usuarioLogueado"));
+    if (!usuario) {
+      window.location.href = "index.html";
     }
-  });
 
-  function descargarQR() {
-    const qr = localStorage.getItem("qrGenerado");
-    if (!qr) return alert("Aún no se ha generado el código QR");
-    const link = document.createElement("a");
-    link.href = qr;
-    link.download = "mi_qr_vitaqr.png";
-    link.click();
-  }
+    // Mostrar datos del usuario
+    const datos = JSON.parse(localStorage.getItem("datosUsuario")) || {};
+    const datosDiv = document.getElementById("datosUsuario");
 
-  function cerrarSesion() {
-    localStorage.removeItem("usuarioLogueado");
-    location.href = "index.html";
-  }
+    datosDiv.innerHTML = `
+      <p><strong>Nombre:</strong> ${datos.nombres || "—"}</p>
+      <p><strong>Apellido:</strong> ${datos.apellidos || "—"}</p>
+      <p><strong>DNI:</strong> ${datos.dni || "—"}</p>
+      <p><strong>Correo:</strong> ${usuario.email || "—"}</p>
+    `;
 
-  // Modal login y menú responsivo
-  const modal = document.getElementById("loginModal");
-  const closeBtn = document.querySelector(".close");
-  const loginForm = document.getElementById("loginForm");
-  const abrirSesion = document.getElementById("abrirSesion");
-  const toggle = document.getElementById("menu-toggle");
-  const navbar = document.getElementById("navbar");
+    // Mostrar foto si existe
+    if (datos.fotoBase64) {
+      document.getElementById("fotoUsuario").src = datos.fotoBase64;
+    }
 
-  abrirSesion.onclick = () => modal.style.display = "block";
-  closeBtn.onclick = () => modal.style.display = "none";
-  window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; };
+    // Generar QR (hacia página pública)
+    const qrDiv = document.getElementById("qrPreview");
+    QRCode.toDataURL("https://vitaqr.online/qr-info.html", { width: 150 }, (err, url) => {
+      if (!err) {
+        const img = new Image();
+        img.src = url;
+        img.alt = "Código QR";
+        qrDiv.appendChild(img);
+        localStorage.setItem("qrGenerado", url);
+      }
+    });
 
-  loginForm.onsubmit = (e) => {
-    e.preventDefault();
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    if (email && password) {
-      const userObj = {
-        email: email,
-        nombre: "Usuario" // reemplazar si se tiene nombre real
+    function descargarQR() {
+      const qr = localStorage.getItem("qrGenerado");
+      if (!qr) return alert("Aún no se ha generado el código QR");
+      const link = document.createElement("a");
+      link.href = qr;
+      link.download = "mi_qr_vitaqr.png";
+      link.click();
+    }
+
+    // Cerrar sesión
+    const cerrarSesion = document.getElementById("cerrarSesion");
+    if (usuario) {
+      cerrarSesion.style.display = "inline-block";
+      cerrarSesion.onclick = () => {
+        localStorage.removeItem("usuarioLogueado");
+        location.href = "index.html";
       };
-      localStorage.setItem("usuarioLogueado", JSON.stringify(userObj));
-      modal.style.display = "none";
-      window.location.href = "perfil.html";
     }
-  };
 
-  toggle.onclick = () => {
-    navbar.classList.toggle("active");
-  };
+    // Modal login
+    const modal = document.getElementById("loginModal");
+    const closeBtn = document.querySelector(".close");
+    const loginForm = document.getElementById("loginForm");
+    const abrirSesion = document.getElementById("abrirSesion");
+    const toggle = document.getElementById("menu-toggle");
+    const navbar = document.getElementById("navbar");
 
-  // Mostrar nombre del usuario en menú si está logueado
-  const iconoUsuario = document.getElementById("abrirSesion");
-  if (usuario && usuario.email) {
-    iconoUsuario.innerHTML = `<i class="fas fa-user"></i> ${usuario.email.split("@")[0]}`;
-    iconoUsuario.title = "Perfil";
-    iconoUsuario.href = "perfil.html";
-  }
-</script>
+    abrirSesion.onclick = () => modal.style.display = "block";
+    closeBtn.onclick = () => modal.style.display = "none";
+    window.onclick = (e) => { if (e.target === modal) modal.style.display = "none"; };
+
+    loginForm.onsubmit = (e) => {
+      e.preventDefault();
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      if (email && password) {
+        const userObj = {
+          email: email,
+          nombre: "Usuario"
+        };
+        localStorage.setItem("usuarioLogueado", JSON.stringify(userObj));
+        modal.style.display = "none";
+        window.location.href = "perfil.html";
+      }
+    };
+
+    toggle.onclick = () => {
+      navbar.classList.toggle("active");
+    };
+
+    // Mostrar usuario en menú
+    if (usuario && usuario.email) {
+      abrirSesion.innerHTML = `<i class="fas fa-user"></i> ${usuario.email.split("@")[0]}`;
+      abrirSesion.href = "perfil.html";
+      abrirSesion.title = "Mi perfil";
+    }
+  </script>
+</body>
+</html>

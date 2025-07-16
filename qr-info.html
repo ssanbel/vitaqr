@@ -1,73 +1,79 @@
+<!-- qr.html: Página para generar el código QR personalizado -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Información médica - VitaQR</title>
-  <link rel="stylesheet" href="index.css" />
-  <style>
-    body {
-      font-family: Helvetica, sans-serif;
-      margin: 0;
-      background-color: #F8F8F8;
-    }
-
-    header {
-      background-color: #EDEEE9;
-      padding: 20px;
-      text-align: center;
-      font-size: 22px;
-      color: #284667;
-      font-weight: bold;
-    }
-
-    .info-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      max-width: 1200px;
-      margin: 30px auto;
-      gap: 40px;
-    }
-
-    .columna {
-      flex: 1 1 400px;
-      background: white;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-
-    .dato {
-      margin-bottom: 12px;
-    }
-
-    .dato strong {
-      color: #AA443F;
-    }
-
-    .foto-usuario {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .foto-usuario img {
-      max-width: 150px;
-      border-radius: 50%;
-      border: 4px solid #284667;
-    }
-
-    @media (max-width: 768px) {
-      .info-container {
-        flex-direction: column;
-        align-items: center;
-      }
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generar QR - VitaQR</title>
+  <link rel="stylesheet" href="index.css">
 </head>
 <body>
+  <header class="main-header">
+    <div class="header-container">
+      <div class="logo">
+        <img src="img/logo.png" alt="Logo VitaQR">
+      </div>
+      <nav class="navbar" id="navbar">
+        <ul class="menu">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="productos.html">Productos</a></li>
+          <li><a href="preguntas-frecuentes.html">Preguntas Frecuentes</a></li>
+          <li><a id="abrirSesion"><i class="fas fa-user"></i></a></li>
+          <li><a href="carrito.html"><i class="fas fa-shopping-cart"></i></a></li>
+        </ul>
+      </nav>
+      <div id="menu-toggle" class="menu-toggle"><i class="fas fa-bars"></i></div>
+    </div>
+  </header>
 
-  <header>Información médica</header>
+  <main style="text-align:center; padding: 60px 20px;">
+    <h1>Tu código QR personalizado</h1>
+    <p>Este código redirige a tu información médica de emergencia</p>
+    <div id="qrPreview" style="margin: 30px auto;"></div>
+    <button onclick="descargarQR()" class="btn" style="max-width: 300px; margin: auto;">Descargar QR</button>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <script>
+    // ID fijo para prueba
+    const id = "Exmlv75ZCZOSiA7NUJvH";
+    const urlQR = `https://vitaqr.online/qr-info.html?id=${id}`;
+
+    QRCode.toDataURL(urlQR, { width: 200 }, (err, url) => {
+      if (!err) {
+        const img = new Image();
+        img.src = url;
+        img.alt = "QR generado";
+        document.getElementById("qrPreview").appendChild(img);
+        localStorage.setItem("qrGenerado", url);
+      }
+    });
+
+    function descargarQR() {
+      const qr = localStorage.getItem("qrGenerado");
+      if (!qr) return alert("Aún no se ha generado el código QR");
+      const link = document.createElement("a");
+      link.href = qr;
+      link.download = "mi_qr_vitaqr.png";
+      link.click();
+    }
+  </script>
+</body>
+</html>
+
+<!-- qr-info.html: Página pública que muestra la información médica desde Firestore -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Información médica</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <header style="background:#EDEEE9; padding:20px; text-align:center; font-weight:bold; font-size:24px; color:#284667;">
+    Información médica
+  </header>
 
   <div class="info-container">
     <div class="columna" id="col1">
@@ -76,7 +82,6 @@
     <div class="columna" id="col2"></div>
   </div>
 
-  <!-- Firebase -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
@@ -94,24 +99,12 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // Obtener ID desde la URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const id = urlParams.get("id");
-
-    if (!id) {
-      document.body.innerHTML = "<h2 style='text-align:center;color:#AA443F;'>⚠️ ID no encontrado en la URL</h2>";
-      throw new Error("ID faltante");
-    }
-
-    // Etiquetas legibles
     const etiquetas = {
       nombres: "Nombres",
       apellidos: "Apellidos",
       dni: "DNI",
       edad: "Edad",
       sexo: "Sexo",
-      estado_civil: "Estado Civil",
-      religion: "Religión",
       sangre: "Tipo de Sangre",
       nacimiento: "Fecha de Nacimiento",
       nombre_contacto: "Contacto de Emergencia",
@@ -129,59 +122,52 @@
       antecedentes_alergia: "Antecedentes de Alergia",
       enfermedades_hereditarias: "Enfermedades Hereditarias",
       fuma: "¿Fuma?",
-      bebe: "¿Bebe?",
-      fotoBase64: "Foto"
+      bebe: "¿Bebe?"
     };
 
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get("id");
     const col1 = document.getElementById("col1");
     const col2 = document.getElementById("col2");
-    const fotoContainer = document.getElementById("fotoContainer");
 
-    const mostrarDatos = async () => {
-      try {
-        const ref = doc(db, "usuarios", id);
-        const docSnap = await getDoc(ref);
+    if (id) {
+      const ref = doc(db, "usuarios", id);
+      getDoc(ref).then((docSnap) => {
+        if (docSnap.exists()) {
+          const datos = docSnap.data();
 
-        if (!docSnap.exists()) {
-          document.body.innerHTML = "<h2 style='text-align:center;color:#AA443F;'>❌ Datos no encontrados</h2>";
-          return;
-        }
-
-        const datos = docSnap.data();
-        let count = 0;
-        const total = Object.keys(etiquetas).length;
-
-        // Mostrar foto
-        if (datos.fotoBase64) {
-          const img = document.createElement("img");
-          img.src = datos.fotoBase64;
-          fotoContainer.appendChild(img);
-        }
-
-        // Mostrar campos en columnas
-        for (const clave in etiquetas) {
-          if (clave === "fotoBase64") continue;
-          if (datos[clave]) {
-            const div = document.createElement("div");
-            div.className = "dato";
-            div.innerHTML = `<strong>${etiquetas[clave]}:</strong> ${datos[clave]}`;
-            if (count < total / 2) {
-              col1.appendChild(div);
-            } else {
-              col2.appendChild(div);
-            }
-            count++;
+          // Mostrar imagen
+          if (datos.fotoBase64) {
+            const img = new Image();
+            img.src = datos.fotoBase64;
+            img.alt = "Foto de perfil";
+            img.style.maxWidth = "150px";
+            img.style.borderRadius = "50%";
+            img.style.border = "4px solid #284667";
+            document.getElementById("fotoContainer").appendChild(img);
           }
+
+          // Mostrar datos
+          const claves = Object.keys(etiquetas);
+          claves.forEach((clave, index) => {
+            if (datos[clave]) {
+              const div = document.createElement("div");
+              div.className = "dato";
+              div.innerHTML = `<strong>${etiquetas[clave]}:</strong> ${datos[clave]}`;
+              if (index % 2 === 0) {
+                col1.appendChild(div);
+              } else {
+                col2.appendChild(div);
+              }
+            }
+          });
+        } else {
+          col1.innerHTML = "<p>❌ No se encontró información.</p>";
         }
-
-      } catch (e) {
-        console.error("Error al cargar datos:", e);
-        document.body.innerHTML = "<h2 style='text-align:center;color:#AA443F;'>Error al cargar los datos</h2>";
-      }
-    };
-
-    mostrarDatos();
+      });
+    } else {
+      col1.innerHTML = "<p>❌ ID no especificado en la URL.</p>";
+    }
   </script>
-
 </body>
 </html>

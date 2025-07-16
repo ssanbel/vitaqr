@@ -3,48 +3,115 @@
 <head>
   <meta charset="UTF-8" />
   <title>Mi perfil - VitaQR</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link rel="stylesheet" href="index.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <style>
+    .perfil-container {
+      max-width: 900px;
+      margin: 60px auto;
+      padding: 20px;
+      display: flex;
+      gap: 40px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+
+    .perfil-foto {
+      flex: 1;
+      max-width: 250px;
+      text-align: center;
+    }
+
+    .perfil-foto img {
+      width: 100%;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+
+    .perfil-info {
+      flex: 2;
+    }
+
+    .perfil-info h2 {
+      color: #284667;
+      margin-bottom: 20px;
+    }
+
+    .perfil-info p {
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    .botones-perfil {
+      margin-top: 30px;
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .botones-perfil button,
+    .botones-perfil a {
+      padding: 10px 16px;
+      font-size: 14px;
+      border: none;
+      border-radius: 6px;
+      background-color: #284667;
+      color: white;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .botones-perfil button:hover,
+    .botones-perfil a:hover {
+      background-color: #AA443F;
+    }
+
+    input[type="file"] {
+      margin-top: 15px;
+    }
+  </style>
 </head>
 <body>
-  <!-- Header -->
+
+  <!-- Menú general -->
   <header class="main-header">
     <div class="header-container">
       <a href="index.html" class="logo">
-        <img src="img/logo-vitaqr.png" alt="VitaQR Logo" />
+        <img src="img/logo-vitaqr.png" alt="VitaQR Logo">
       </a>
       <nav class="navbar" id="navbar">
         <ul class="menu">
           <li><a href="index.html">Inicio</a></li>
           <li><a href="productos.html">Productos</a></li>
           <li><a href="preguntas-frecuentes.html">Preguntas Frecuentes</a></li>
-          <li><a href="#" id="abrirSesion" title="Iniciar sesión"><i class="fas fa-sign-in-alt"></i></a></li>
-          <li><a href="#" id="cerrarSesion" style="display:none;" title="Cerrar sesión"><i class="fas fa-sign-out-alt"></i></a></li>
-          <li><a href="carrito.html" title="Carrito"><i class="fas fa-shopping-cart"></i></a></li>
+          <li><a href="perfil.html" id="userNameDisplay"><i class="fas fa-user"></i></a></li>
+          <li><a href="carrito.html"><i class="fas fa-shopping-cart"></i></a></li>
         </ul>
       </nav>
-      <div class="menu-toggle" id="menu-toggle"><i class="fas fa-bars"></i></div>
+      <div class="menu-toggle" id="menu-toggle">
+        <i class="fas fa-bars"></i>
+      </div>
     </div>
   </header>
 
   <!-- Contenido principal -->
-  <main style="padding: 40px 20px; max-width: 900px; margin: auto;">
-    <h1 style="color:#284667;">Perfil del usuario</h1>
-    <div style="display: flex; flex-wrap: wrap; gap: 40px; margin-top: 30px;">
-      <!-- Foto y QR -->
-      <div style="flex: 1; min-width: 250px; text-align: center;">
-        <img id="fotoUsuario" src="img/avatar.png" alt="Foto de perfil" style="width: 180px; height: 180px; border-radius: 50%; object-fit: cover; border: 3px solid #284667;">
-        <div id="qrPreview" style="margin-top: 30px;"></div>
-        <button onclick="descargarQR()" class="btn" style="margin-top: 15px;">Descargar QR</button>
-      </div>
+  <main class="perfil-container">
+    <div class="perfil-foto">
+      <img src="img/user-placeholder.png" alt="Foto de perfil" id="fotoUsuario">
+      <input type="file" name="foto" accept="image/*" />
+    </div>
 
-      <!-- Datos -->
-      <div style="flex: 2; min-width: 250px;">
-        <div id="datosUsuario"></div>
-        <div style="margin-top: 30px;">
-          <a href="registro.html" class="btn">Editar datos</a>
-        </div>
+    <div class="perfil-info">
+      <h2>Datos del usuario</h2>
+      <p><strong>Nombre:</strong> <span id="nombreUsuario">—</span></p>
+      <p><strong>Apellido:</strong> <span id="apellidoUsuario">—</span></p>
+      <p><strong>DNI:</strong> <span id="dniUsuario">—</span></p>
+
+      <div class="botones-perfil">
+        <a href="registro.html">Editar formulario</a>
+        <a href="qr.html">Generar código QR</a>
+        <button id="cerrarSesionBtn">Cerrar sesión</button>
       </div>
     </div>
   </main>
@@ -55,113 +122,6 @@
     <a href="terminos-condiciones.html">Términos y Condiciones</a>
   </footer>
 
-  <!-- Modal login -->
-  <div id="loginModal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <h2>Inicia sesión</h2>
-      <form id="loginForm">
-        <label for="email">Correo electrónico:</label>
-        <input type="email" id="email" required>
-        <label for="password">Contraseña:</label>
-        <input type="password" id="password" required>
-        <button type="submit" class="btn">Iniciar sesión</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Script -->
-  <script>
-    // Verificar sesión
-    const usuario = JSON.parse(localStorage.getItem("usuarioLogueado"));
-    if (!usuario) {
-      window.location.href = "index.html";
-    }
-
-    // Mostrar datos del usuario
-    const datos = JSON.parse(localStorage.getItem("datosUsuario")) || {};
-    const datosDiv = document.getElementById("datosUsuario");
-
-    datosDiv.innerHTML = `
-      <p><strong>Nombre:</strong> ${datos.nombres || "—"}</p>
-      <p><strong>Apellido:</strong> ${datos.apellidos || "—"}</p>
-      <p><strong>DNI:</strong> ${datos.dni || "—"}</p>
-      <p><strong>Correo:</strong> ${usuario.email || "—"}</p>
-    `;
-
-    // Mostrar foto si existe
-    if (datos.fotoBase64) {
-      document.getElementById("fotoUsuario").src = datos.fotoBase64;
-    }
-
-    // Generar QR (hacia página pública)
-    const qrDiv = document.getElementById("qrPreview");
-    QRCode.toDataURL("https://vitaqr.online/qr-info.html", { width: 150 }, (err, url) => {
-      if (!err) {
-        const img = new Image();
-        img.src = url;
-        img.alt = "Código QR";
-        qrDiv.appendChild(img);
-        localStorage.setItem("qrGenerado", url);
-      }
-    });
-
-    function descargarQR() {
-      const qr = localStorage.getItem("qrGenerado");
-      if (!qr) return alert("Aún no se ha generado el código QR");
-      const link = document.createElement("a");
-      link.href = qr;
-      link.download = "mi_qr_vitaqr.png";
-      link.click();
-    }
-
-    // Cerrar sesión
-    const cerrarSesion = document.getElementById("cerrarSesion");
-    if (usuario) {
-      cerrarSesion.style.display = "inline-block";
-      cerrarSesion.onclick = () => {
-        localStorage.removeItem("usuarioLogueado");
-        location.href = "index.html";
-      };
-    }
-
-    // Modal login
-    const modal = document.getElementById("loginModal");
-    const closeBtn = document.querySelector(".close");
-    const loginForm = document.getElementById("loginForm");
-    const abrirSesion = document.getElementById("abrirSesion");
-    const toggle = document.getElementById("menu-toggle");
-    const navbar = document.getElementById("navbar");
-
-    abrirSesion.onclick = () => modal.style.display = "block";
-    closeBtn.onclick = () => modal.style.display = "none";
-    window.onclick = (e) => { if (e.target === modal) modal.style.display = "none"; };
-
-    loginForm.onsubmit = (e) => {
-      e.preventDefault();
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      if (email && password) {
-        const userObj = {
-          email: email,
-          nombre: "Usuario"
-        };
-        localStorage.setItem("usuarioLogueado", JSON.stringify(userObj));
-        modal.style.display = "none";
-        window.location.href = "perfil.html";
-      }
-    };
-
-    toggle.onclick = () => {
-      navbar.classList.toggle("active");
-    };
-
-    // Mostrar usuario en menú
-    if (usuario && usuario.email) {
-      abrirSesion.innerHTML = `<i class="fas fa-user"></i> ${usuario.email.split("@")[0]}`;
-      abrirSesion.href = "perfil.html";
-      abrirSesion.title = "Mi perfil";
-    }
-  </script>
+  <script src="perfil.js"></script>
 </body>
 </html>

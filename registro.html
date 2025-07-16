@@ -1,90 +1,118 @@
-<!-- qr.html: Página para generar el código QR personalizado -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Generar QR - VitaQR</title>
-  <link rel="stylesheet" href="index.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Registro Médico - VitaQR</title>
+  <link rel="stylesheet" href="index.css" />
+  <link rel="stylesheet" href="registro.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 <body>
+
   <header class="main-header">
     <div class="header-container">
-      <div class="logo">
-        <img src="img/logo.png" alt="Logo VitaQR">
-      </div>
+      <a href="index.html" class="logo"><img src="img/logo-vitaqr.png" alt="Logo VitaQR"></a>
       <nav class="navbar" id="navbar">
         <ul class="menu">
           <li><a href="index.html">Inicio</a></li>
           <li><a href="productos.html">Productos</a></li>
           <li><a href="preguntas-frecuentes.html">Preguntas Frecuentes</a></li>
-          <li><a id="abrirSesion"><i class="fas fa-user"></i></a></li>
-          <li><a href="carrito.html"><i class="fas fa-shopping-cart"></i></a></li>
+          <li><a href="#" id="abrirSesion" title="Iniciar sesión"><i class="fas fa-user"></i></a></li>
+          <li><a href="carrito.html" title="Carrito"><i class="fas fa-shopping-cart"></i></a></li>
         </ul>
       </nav>
-      <div id="menu-toggle" class="menu-toggle"><i class="fas fa-bars"></i></div>
+      <div class="menu-toggle" id="menu-toggle"><i class="fas fa-bars"></i></div>
     </div>
   </header>
 
-  <main style="text-align:center; padding: 60px 20px;">
-    <h1>Tu código QR personalizado</h1>
-    <p>Este código redirige a tu información médica de emergencia</p>
-    <div id="qrPreview" style="margin: 30px auto;"></div>
-    <button onclick="descargarQR()" class="btn" style="max-width: 300px; margin: auto;">Descargar QR</button>
+  <main class="registro-container">
+    <h1>Registro de Información Médica</h1>
+    <form id="registro-form">
+      <fieldset>
+        <legend>Datos Personales</legend>
+        <label>Nombres: <input type="text" name="nombres"></label>
+        <label>Apellidos: <input type="text" name="apellidos"></label>
+        <label>DNI: <input type="text" name="dni"></label>
+        <label>Edad: <input type="number" name="edad"></label>
+        <label>Sexo:
+          <select name="sexo">
+            <option value="">Selecciona</option>
+            <option>Femenino</option>
+            <option>Masculino</option>
+            <option>Otro</option>
+          </select>
+        </label>
+        <label>Estado Civil: <input type="text" name="estado_civil"></label>
+        <label>Religión: <input type="text" name="religion"></label>
+        <label>Tipo de Sangre: <input type="text" name="sangre"></label>
+        <label>Fecha de Nacimiento: <input type="date" name="nacimiento"></label>
+        <label>Foto de Perfil: <input type="file" name="foto" accept="image/*"></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Contacto de Emergencia</legend>
+        <label>Nombre del Contacto: <input type="text" name="nombre_contacto"></label>
+        <label>Teléfono de Contacto: <input type="tel" name="telefono_contacto"></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Información Médica General</legend>
+        <label>Peso (kg): <input type="number" name="peso"></label>
+        <label>Altura (cm): <input type="number" name="altura"></label>
+        <label>Alergias: <input type="text" name="alergias"></label>
+        <label>Condiciones: <input type="text" name="condiciones"></label>
+        <label>Cirugías: <input type="text" name="cirugias"></label>
+        <label>Vacunas: <input type="text" name="vacunas"></label>
+        <label>Seguro: <input type="text" name="seguro"></label>
+        <label>Clínica: <input type="text" name="clinica"></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Medicamentos</legend>
+        <label>Medicamentos Continuos: <input type="text" name="med_continuos"></label>
+        <label>Medicamentos Emergencia: <input type="text" name="med_emergencia"></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Historial Familiar</legend>
+        <label>Antecedentes de Alergia: <input type="text" name="antecedentes_alergia"></label>
+        <label>Enfermedades Hereditarias: <input type="text" name="enfermedades_hereditarias"></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Estilo de Vida</legend>
+        <label>¿Fuma?
+          <select name="fuma">
+            <option value="">Selecciona</option>
+            <option>Sí</option>
+            <option>No</option>
+          </select>
+        </label>
+        <label>¿Bebe?
+          <select name="bebe">
+            <option value="">Selecciona</option>
+            <option>Sí</option>
+            <option>No</option>
+          </select>
+        </label>
+      </fieldset>
+
+      <button type="submit" class="btn">Guardar Información</button>
+    </form>
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
-  <script>
-    // ID fijo para prueba
-    const id = "Exmlv75ZCZOSiA7NUJvH";
-    const urlQR = `https://vitaqr.online/qr-info.html?id=${id}`;
-
-    QRCode.toDataURL(urlQR, { width: 200 }, (err, url) => {
-      if (!err) {
-        const img = new Image();
-        img.src = url;
-        img.alt = "QR generado";
-        document.getElementById("qrPreview").appendChild(img);
-        localStorage.setItem("qrGenerado", url);
-      }
-    });
-
-    function descargarQR() {
-      const qr = localStorage.getItem("qrGenerado");
-      if (!qr) return alert("Aún no se ha generado el código QR");
-      const link = document.createElement("a");
-      link.href = qr;
-      link.download = "mi_qr_vitaqr.png";
-      link.click();
-    }
-  </script>
-</body>
-</html>
-
-<!-- qr-info.html: Página pública que muestra la información médica desde Firestore -->
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Información médica</title>
-  <link rel="stylesheet" href="index.css">
-</head>
-<body>
-  <header style="background:#EDEEE9; padding:20px; text-align:center; font-weight:bold; font-size:24px; color:#284667;">
-    Información médica
-  </header>
-
-  <div class="info-container">
-    <div class="columna" id="col1">
-      <div class="foto-usuario" id="fotoContainer"></div>
+  <footer class="footer">
+    <div class="footer-content">
+      <p>© 2025 VitaQR - Proyecto Académico</p>
+      <a href="terminos-condiciones.html">Términos y Condiciones</a>
     </div>
-    <div class="columna" id="col2"></div>
-  </div>
+  </footer>
 
+  <!-- Firebase y lógica -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyB9j5KqbxMFEC88tbZ1ApUWrKqre01TmcA",
@@ -92,80 +120,51 @@
       projectId: "vitaqronline",
       storageBucket: "vitaqronline.appspot.com",
       messagingSenderId: "584669491826",
-      appId: "1:584669491826:web:484adb09e2d80e1c8bbc8eb",
-      measurementId: "G-2B7W7TL32N"
+      appId: "1:584669491826:web:484adb09e2d80e1c8bbc8eb"
     };
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    const etiquetas = {
-      nombres: "Nombres",
-      apellidos: "Apellidos",
-      dni: "DNI",
-      edad: "Edad",
-      sexo: "Sexo",
-      sangre: "Tipo de Sangre",
-      nacimiento: "Fecha de Nacimiento",
-      nombre_contacto: "Contacto de Emergencia",
-      telefono_contacto: "Teléfono de Contacto",
-      peso: "Peso",
-      altura: "Altura",
-      alergias: "Alergias",
-      condiciones: "Condiciones Médicas",
-      cirugias: "Cirugías",
-      vacunas: "Vacunas",
-      seguro: "Seguro",
-      clinica: "Clínica",
-      med_continuos: "Medicamentos Continuos",
-      med_emergencia: "Medicamentos Emergencia",
-      antecedentes_alergia: "Antecedentes de Alergia",
-      enfermedades_hereditarias: "Enfermedades Hereditarias",
-      fuma: "¿Fuma?",
-      bebe: "¿Bebe?"
-    };
+    const form = document.getElementById("registro-form");
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const id = urlParams.get("id");
-    const col1 = document.getElementById("col1");
-    const col2 = document.getElementById("col2");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const datos = {};
 
-    if (id) {
-      const ref = doc(db, "usuarios", id);
-      getDoc(ref).then((docSnap) => {
-        if (docSnap.exists()) {
-          const datos = docSnap.data();
-
-          if (datos.fotoBase64) {
-            const img = new Image();
-            img.src = datos.fotoBase64;
-            img.alt = "Foto de perfil";
-            img.style.maxWidth = "150px";
-            img.style.borderRadius = "50%";
-            img.style.border = "4px solid #284667";
-            document.getElementById("fotoContainer").appendChild(img);
-          }
-
-          const claves = Object.keys(etiquetas);
-          claves.forEach((clave, index) => {
-            if (datos[clave] !== undefined && datos[clave] !== null && datos[clave] !== "") {
-              const div = document.createElement("div");
-              div.className = "dato";
-              div.innerHTML = `<strong>${etiquetas[clave]}:</strong> ${datos[clave]}`;
-              if (index % 2 === 0) {
-                col1.appendChild(div);
-              } else {
-                col2.appendChild(div);
-              }
-            }
-          });
-        } else {
-          col1.innerHTML = "<p>❌ No se encontró información.</p>";
+      for (const [clave, valor] of formData.entries()) {
+        if (valor !== "") {
+          datos[clave] = valor;
         }
-      });
-    } else {
-      col1.innerHTML = "<p>❌ ID no especificado en la URL.</p>";
+      }
+
+      const fotoInput = form.elements["foto"];
+      if (fotoInput.files.length > 0) {
+        const reader = new FileReader();
+        reader.onload = async function () {
+          datos.fotoBase64 = reader.result;
+          await guardarDatos(datos);
+        };
+        reader.readAsDataURL(fotoInput.files[0]);
+      } else {
+        await guardarDatos(datos);
+      }
+    });
+
+    async function guardarDatos(datos) {
+      try {
+        const docRef = await addDoc(collection(db, "usuarios"), datos);
+        localStorage.setItem("datosUsuario", JSON.stringify(datos));
+        localStorage.setItem("usuarioID", docRef.id);
+        alert("✅ Información guardada");
+        window.location.href = "perfil.html";
+      } catch (error) {
+        console.error("❌ Error al guardar en Firebase:", error);
+        alert("Hubo un error al guardar tus datos.");
+      }
     }
   </script>
+
 </body>
 </html>

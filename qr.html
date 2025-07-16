@@ -1,0 +1,45 @@
+<!-- qr.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Generar QR - VitaQR</title>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <style>
+    body { font-family: Helvetica; text-align: center; padding: 50px; }
+    #qr { margin-top: 30px; }
+  </style>
+</head>
+<body>
+  <h1>Tu código QR</h1>
+  <div id="qr"></div>
+  <button onclick="descargarQR()">Descargar QR</button>
+
+  <script>
+    const userID = localStorage.getItem("usuarioID");
+    if (!userID) {
+      alert("No se encontró el ID del usuario. Debes registrarte primero.");
+      window.location.href = "registro.html";
+    } else {
+      const urlQR = `https://tusitio.com/qr-info.html?id=${userID}`;
+      QRCode.toDataURL(urlQR, { width: 200 }, (err, url) => {
+        if (!err) {
+          const img = new Image();
+          img.src = url;
+          img.id = "codigoQR";
+          document.getElementById("qr").appendChild(img);
+          localStorage.setItem("qrGenerado", url);
+        }
+      });
+    }
+
+    function descargarQR() {
+      const qr = document.getElementById("codigoQR").src;
+      const link = document.createElement("a");
+      link.href = qr;
+      link.download = "vitaqr_codigo.png";
+      link.click();
+    }
+  </script>
+</body>
+</html>

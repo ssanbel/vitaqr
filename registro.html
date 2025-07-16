@@ -1,3 +1,4 @@
+<!-- qr.html: Página para generar el código QR personalizado -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -135,7 +136,6 @@
         if (docSnap.exists()) {
           const datos = docSnap.data();
 
-          // Mostrar imagen
           if (datos.fotoBase64) {
             const img = new Image();
             img.src = datos.fotoBase64;
@@ -146,10 +146,9 @@
             document.getElementById("fotoContainer").appendChild(img);
           }
 
-          // Mostrar datos
           const claves = Object.keys(etiquetas);
           claves.forEach((clave, index) => {
-            if (datos[clave]) {
+            if (datos[clave] !== undefined && datos[clave] !== null && datos[clave] !== "") {
               const div = document.createElement("div");
               div.className = "dato";
               div.innerHTML = `<strong>${etiquetas[clave]}:</strong> ${datos[clave]}`;

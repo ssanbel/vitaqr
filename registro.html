@@ -3,135 +3,220 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Registro - VidaQR</title>
-  <link rel="stylesheet" href="styles.css" />
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js"></script>
+  <title>Perfil - VidaQR</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <style>
-    body { font-family: Helvetica, sans-serif; background: #EDEEE9; margin: 0; padding: 0; }
-    header, footer { background: #284667; color: white; padding: 1em; text-align: center; }
-    .container { max-width: 800px; margin: 2em auto; background: white; padding: 2em; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-    label { display: block; margin-top: 1em; }
-    input, select, textarea {
-      width: 100%; padding: 0.7em; margin-top: 0.3em; border: 1px solid #ccc; border-radius: 5px;
+    body {
+      font-family: Helvetica, sans-serif;
+      margin: 0;
+      background: #EDEEE9;
     }
-    input.error, select.error, textarea.error {
+    header {
+      background-color: #284667;
+      color: #fff;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header .logo {
+      font-size: 20px;
+      font-weight: bold;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 10px;
+    }
+    .iconos i {
+      font-size: 18px;
+      margin-left: 15px;
+      cursor: pointer;
+    }
+    main {
+      padding: 20px;
+    }
+    .botones {
+      margin-top: 20px;
+    }
+    .botones button {
+      margin-right: 10px;
+      padding: 10px;
+      border: none;
+      background-color: #AA443F;
+      color: white;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 10;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.4);
+    }
+    .modal-content {
+      background-color: #fff;
+      margin: 5% auto;
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 700px;
+      position: relative;
+    }
+    .modal-content h2 {
+      margin-top: 0;
+    }
+    .close {
+      position: absolute;
+      right: 15px;
+      top: 10px;
+      font-size: 22px;
+      cursor: pointer;
+      color: #AA443F;
+    }
+    input, select, textarea {
+      width: 100%;
+      margin: 8px 0;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    input.error {
       border-color: red;
     }
-    .btn { background: #AA443F; color: white; border: none; padding: 0.8em 1.5em; border-radius: 5px; cursor: pointer; margin-top: 1.5em; }
-    .btn:hover { background: #8d3531; }
-    .success, .error-msg {
-      margin-top: 1em; padding: 1em; border-radius: 5px; text-align: center;
+    footer {
+      background-color: #284667;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      margin-top: 30px;
     }
-    .success { background: #d4edda; color: #155724; }
-    .error-msg { background: #f8d7da; color: #721c24; }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>VidaQR - Registro Médico</h1>
+  <div class="logo">VidaQR</div>
+  <nav>
+    <a href="index.html">Inicio</a>
+    <a href="productos.html">Productos</a>
+    <a href="carrito.html"><i class="fas fa-shopping-cart"></i></a>
+    <a href="#"><i class="fas fa-user"></i></a>
+  </nav>
 </header>
 
-<div class="container">
-  <h2>Completa tu información médica</h2>
-  <form id="registroForm">
-    <label>Nombres: <input type="text" name="nombres" /></label>
-    <label>Apellidos: <input type="text" name="apellidos" /></label>
-    <label>DNI: <input type="text" name="dni" /></label>
-    <label>Fecha de nacimiento: <input type="date" name="fechaNacimiento" /></label>
-    <label>Teléfono: <input type="text" name="telefono" /></label>
-    <label>Contacto de emergencia: <input type="text" name="contactoEmergencia" /></label>
-    <label>Tipo de sangre: <input type="text" name="tipoSangre" /></label>
-    <label>¿Padece alguna enfermedad?: <textarea name="enfermedades"></textarea></label>
-    <label>¿Toma medicamentos?: <textarea name="medicamentos"></textarea></label>
-    <label>¿Tiene alergias?: <textarea name="alergias"></textarea></label>
-    <label>¿Fuma?: 
-      <select name="fuma">
-        <option value="">Seleccionar</option>
-        <option value="sí">Sí</option>
-        <option value="no">No</option>
-      </select>
-    </label>
-    <label>¿Consume alcohol?: 
-      <select name="alcohol">
-        <option value="">Seleccionar</option>
-        <option value="sí">Sí</option>
-        <option value="no">No</option>
-      </select>
-    </label>
-    <label>Actividad física: 
-      <select name="actividadFisica">
-        <option value="">Seleccionar</option>
-        <option value="ninguna">Ninguna</option>
-        <option value="ocasional">Ocasional</option>
-        <option value="frecuente">Frecuente</option>
-      </select>
-    </label>
+<main>
+  <h1>Perfil del Usuario</h1>
+  <div id="userInfo">
+    <!-- Aquí aparecerán los datos del usuario -->
+  </div>
 
-    <button type="submit" class="btn">Guardar datos</button>
-    <div id="mensaje"></div>
-  </form>
+  <div class="botones">
+    <button onclick="abrirModal()">Editar formulario</button>
+    <button onclick="window.location.href='qr.html'">Generar código QR</button>
+    <button onclick="cerrarSesion()">Cerrar sesión</button>
+  </div>
+</main>
+
+<!-- MODAL -->
+<div id="modalFormulario" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="cerrarModal()">&times;</span>
+    <h2>Editar información médica</h2>
+    <form id="registroForm">
+      <label>Nombres:</label>
+      <input type="text" name="nombres" required />
+      <label>Apellidos:</label>
+      <input type="text" name="apellidos" required />
+      <label>DNI:</label>
+      <input type="text" name="dni" required />
+      <label>Fecha de Nacimiento:</label>
+      <input type="date" name="fechaNacimiento" />
+      <label>Teléfono de Emergencia:</label>
+      <input type="text" name="telefonoEmergencia" />
+      <label>Enfermedades crónicas:</label>
+      <textarea name="enfermedades"></textarea>
+      <label>Medicamentos que toma:</label>
+      <textarea name="medicamentos"></textarea>
+      <button type="submit">Guardar</button>
+    </form>
+  </div>
 </div>
 
 <footer>
-  <p>&copy; 2025 VidaQR. Todos los derechos reservados. | <a href="terminos-condiciones.html" style="color: white;">Términos y condiciones</a></p>
+  <p>&copy; 2025 VidaQR | <a href="terminos-condiciones.html" style="color: white;">Términos y condiciones</a></p>
 </footer>
 
 <script>
-  // Configuración Firebase
-  const firebaseConfig = {
-    apiKey: "TU_API_KEY",
-    authDomain: "TU_AUTH_DOMAIN",
-    projectId: "TU_PROJECT_ID",
-    storageBucket: "TU_STORAGE_BUCKET",
-    messagingSenderId: "TU_SENDER_ID",
-    appId: "TU_APP_ID"
-  };
+  // Mostrar modal
+  function abrirModal() {
+    document.getElementById('modalFormulario').style.display = 'block';
+    cargarDatosEnFormulario();
+  }
 
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  const db = firebase.firestore();
+  function cerrarModal() {
+    document.getElementById('modalFormulario').style.display = 'none';
+  }
 
-  const form = document.getElementById('registroForm');
-  const mensaje = document.getElementById('mensaje');
+  function cerrarSesion() {
+    localStorage.removeItem('usuario');
+    window.location.href = 'index.html';
+  }
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    mensaje.innerHTML = "";
-    
-    const datos = {};
-    let errorEncontrado = false;
-
-    [...form.elements].forEach(el => {
-      if (el.name && el.type !== 'submit') {
-        const valor = el.value.trim();
-        datos[el.name] = valor;
-        el.classList.remove('error');
-        if (valor === "" && (el.tagName === "INPUT" || el.tagName === "TEXTAREA")) {
-          el.classList.add('error');
-          errorEncontrado = true;
-        }
-      }
-    });
-
-    try {
-      const user = await new Promise((resolve, reject) => {
-        const unsubscribe = auth.onAuthStateChanged(u => {
-          unsubscribe();
-          u ? resolve(u) : reject("No has iniciado sesión.");
-        });
-      });
-
-      await db.collection("usuarios").doc(user.uid).set(datos, { merge: true });
-
-      mensaje.innerHTML = "<div class='success'>✅ Datos guardados correctamente.</div>";
-    } catch (err) {
-      console.error("Error al guardar:", err);
-      mensaje.innerHTML = `<div class="error-msg">❌ ${err.message || err}</div>`;
+  // Cargar datos del usuario
+  function mostrarDatos() {
+    const datos = JSON.parse(localStorage.getItem('formulario')) || {};
+    let html = "";
+    for (let clave in datos) {
+      html += `<p><strong>${clave}:</strong> ${datos[clave]}</p>`;
     }
+    document.getElementById('userInfo').innerHTML = html || "<p>No hay datos registrados aún.</p>";
+  }
+
+  // Prellenar formulario al abrir modal
+  function cargarDatosEnFormulario() {
+    const datos = JSON.parse(localStorage.getItem('formulario')) || {};
+    const form = document.getElementById('registroForm');
+    for (let elemento of form.elements) {
+      if (elemento.name && datos[elemento.name]) {
+        elemento.value = datos[elemento.name];
+      }
+    }
+  }
+
+  // Guardar datos con validación
+  document.getElementById('registroForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const form = e.target;
+    let datos = {};
+    let valido = true;
+
+    for (let input of form.elements) {
+      if (input.name) {
+        input.classList.remove("error");
+        if (input.required && input.value.trim() === "") {
+          input.classList.add("error");
+          valido = false;
+        }
+        datos[input.name] = input.value.trim();
+      }
+    }
+
+    if (!valido) {
+      alert("Por favor, completa los campos obligatorios marcados en rojo.");
+      return;
+    }
+
+    localStorage.setItem('formulario', JSON.stringify(datos));
+    cerrarModal();
+    mostrarDatos();
   });
+
+  // Al cargar
+  document.addEventListener('DOMContentLoaded', mostrarDatos);
 </script>
 
 </body>

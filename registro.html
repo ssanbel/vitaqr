@@ -3,189 +3,136 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Registro Médico - VitaQR</title>
-  <link rel="stylesheet" href="index.css" />
-  <link rel="stylesheet" href="registro.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <title>Registro - VidaQR</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js"></script>
   <style>
-    input:invalid, select:invalid {
-      border: 2px solid red;
+    body { font-family: Helvetica, sans-serif; background: #EDEEE9; margin: 0; padding: 0; }
+    header, footer { background: #284667; color: white; padding: 1em; text-align: center; }
+    .container { max-width: 800px; margin: 2em auto; background: white; padding: 2em; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    label { display: block; margin-top: 1em; }
+    input, select, textarea {
+      width: 100%; padding: 0.7em; margin-top: 0.3em; border: 1px solid #ccc; border-radius: 5px;
     }
+    input.error, select.error, textarea.error {
+      border-color: red;
+    }
+    .btn { background: #AA443F; color: white; border: none; padding: 0.8em 1.5em; border-radius: 5px; cursor: pointer; margin-top: 1.5em; }
+    .btn:hover { background: #8d3531; }
+    .success, .error-msg {
+      margin-top: 1em; padding: 1em; border-radius: 5px; text-align: center;
+    }
+    .success { background: #d4edda; color: #155724; }
+    .error-msg { background: #f8d7da; color: #721c24; }
   </style>
 </head>
 <body>
-  <header class="main-header">
-    <div class="header-container">
-      <a href="index.html" class="logo">
-        <img src="img/logo-vitaqr.png" alt="VitaQR Logo">
-      </a>
-      <nav class="navbar" id="navbar">
-        <ul class="menu">
-          <li><a href="index.html">Inicio</a></li>
-          <li><a href="productos.html">Productos</a></li>
-          <li><a href="preguntas-frecuentes.html">Preguntas Frecuentes</a></li>
-          <li><a href="#" id="abrirSesion" title="Iniciar sesión"><i class="fas fa-user"></i></a></li>
-          <li><a href="carrito.html" title="Carrito"><i class="fas fa-shopping-cart"></i></a></li>
-        </ul>
-      </nav>
-      <div class="menu-toggle" id="menu-toggle">
-        <i class="fas fa-bars"></i>
-      </div>
-    </div>
-  </header>
 
-  <main class="registro-container">
-    <h1>Registro de Información Médica</h1>
-    <form id="registro-form" novalidate>
-      <fieldset>
-        <legend>Datos Personales</legend>
-        <label>Nombres: <input type="text" name="nombres" required></label>
-        <label>Apellidos: <input type="text" name="apellidos" required></label>
-        <label>DNI: <input type="text" name="dni" required></label>
-        <label>Edad: <input type="number" name="edad" required></label>
-        <label>Sexo:
-          <select name="sexo" required>
-            <option value="">Selecciona</option>
-            <option>Femenino</option>
-            <option>Masculino</option>
-            <option>Otro</option>
-          </select>
-        </label>
-        <label>Estado Civil: <input type="text" name="estado_civil" required></label>
-        <label>Religión: <input type="text" name="religion" required></label>
-        <label>Tipo de Sangre: <input type="text" name="sangre" required></label>
-        <label>Fecha de Nacimiento: <input type="date" name="nacimiento" required></label>
-      </fieldset>
+<header>
+  <h1>VidaQR - Registro Médico</h1>
+</header>
 
-      <fieldset>
-        <legend>Contacto de Emergencia</legend>
-        <label>Nombre del Contacto: <input type="text" name="nombre_contacto" required></label>
-        <label>Teléfono de Contacto: <input type="tel" name="telefono_contacto" required></label>
-      </fieldset>
+<div class="container">
+  <h2>Completa tu información médica</h2>
+  <form id="registroForm">
+    <label>Nombres: <input type="text" name="nombres" /></label>
+    <label>Apellidos: <input type="text" name="apellidos" /></label>
+    <label>DNI: <input type="text" name="dni" /></label>
+    <label>Fecha de nacimiento: <input type="date" name="fechaNacimiento" /></label>
+    <label>Teléfono: <input type="text" name="telefono" /></label>
+    <label>Contacto de emergencia: <input type="text" name="contactoEmergencia" /></label>
+    <label>Tipo de sangre: <input type="text" name="tipoSangre" /></label>
+    <label>¿Padece alguna enfermedad?: <textarea name="enfermedades"></textarea></label>
+    <label>¿Toma medicamentos?: <textarea name="medicamentos"></textarea></label>
+    <label>¿Tiene alergias?: <textarea name="alergias"></textarea></label>
+    <label>¿Fuma?: 
+      <select name="fuma">
+        <option value="">Seleccionar</option>
+        <option value="sí">Sí</option>
+        <option value="no">No</option>
+      </select>
+    </label>
+    <label>¿Consume alcohol?: 
+      <select name="alcohol">
+        <option value="">Seleccionar</option>
+        <option value="sí">Sí</option>
+        <option value="no">No</option>
+      </select>
+    </label>
+    <label>Actividad física: 
+      <select name="actividadFisica">
+        <option value="">Seleccionar</option>
+        <option value="ninguna">Ninguna</option>
+        <option value="ocasional">Ocasional</option>
+        <option value="frecuente">Frecuente</option>
+      </select>
+    </label>
 
-      <fieldset>
-        <legend>Información Médica General</legend>
-        <label>Peso (kg): <input type="number" name="peso" required></label>
-        <label>Altura (cm): <input type="number" name="altura" required></label>
-        <label>Alergias: <input type="text" name="alergias" required></label>
-        <label>Condiciones: <input type="text" name="condiciones" required></label>
-        <label>Cirugías: <input type="text" name="cirugias" required></label>
-        <label>Vacunas: <input type="text" name="vacunas" required></label>
-        <label>Seguro: <input type="text" name="seguro" required></label>
-        <label>Clínica: <input type="text" name="clinica" required></label>
-      </fieldset>
+    <button type="submit" class="btn">Guardar datos</button>
+    <div id="mensaje"></div>
+  </form>
+</div>
 
-      <fieldset>
-        <legend>Medicamentos</legend>
-        <label>Medicamentos Continuos: <input type="text" name="med_continuos" required></label>
-        <label>Medicamentos Emergencia: <input type="text" name="med_emergencia" required></label>
-      </fieldset>
+<footer>
+  <p>&copy; 2025 VidaQR. Todos los derechos reservados. | <a href="terminos-condiciones.html" style="color: white;">Términos y condiciones</a></p>
+</footer>
 
-      <fieldset>
-        <legend>Historial Familiar</legend>
-        <label>Antecedentes de Alergia: <input type="text" name="antecedentes_alergia" required></label>
-        <label>Enfermedades Hereditarias: <input type="text" name="enfermedades_hereditarias" required></label>
-      </fieldset>
+<script>
+  // Configuración Firebase
+  const firebaseConfig = {
+    apiKey: "TU_API_KEY",
+    authDomain: "TU_AUTH_DOMAIN",
+    projectId: "TU_PROJECT_ID",
+    storageBucket: "TU_STORAGE_BUCKET",
+    messagingSenderId: "TU_SENDER_ID",
+    appId: "TU_APP_ID"
+  };
 
-      <fieldset>
-        <legend>Estilo de Vida</legend>
-        <label>¿Fuma?
-          <select name="fuma" required>
-            <option value="">Selecciona</option>
-            <option>Sí</option>
-            <option>No</option>
-          </select>
-        </label>
-        <label>¿Bebe?
-          <select name="bebe" required>
-            <option value="">Selecciona</option>
-            <option>Sí</option>
-            <option>No</option>
-          </select>
-        </label>
-      </fieldset>
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
 
-      <button type="submit" class="btn">Guardar Información</button>
-    </form>
-  </main>
+  const form = document.getElementById('registroForm');
+  const mensaje = document.getElementById('mensaje');
 
-  <footer class="footer">
-    <div class="footer-content">
-      <p>© 2025 VitaQR - Proyecto Académico</p>
-      <a href="terminos-condiciones.html">Términos y Condiciones</a>
-    </div>
-  </footer>
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    mensaje.innerHTML = "";
+    
+    const datos = {};
+    let errorEncontrado = false;
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyB9j5KqbxMFEC88tbZ1ApUWrKqre01TmcA",
-      authDomain: "vitaqronline.firebaseapp.com",
-      projectId: "vitaqronline",
-      storageBucket: "vitaqronline.appspot.com",
-      messagingSenderId: "584669491826",
-      appId: "1:584669491826:web:484adb09e2d80e1c8bbc8eb",
-      measurementId: "G-2B7W7TL32N"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    const form = document.getElementById("registro-form");
-
-    if (!localStorage.getItem("usuarioLogueado")) {
-      window.location.href = "index.html";
-    }
-
-    window.addEventListener("DOMContentLoaded", () => {
-      const datosGuardados = JSON.parse(localStorage.getItem("datosUsuario") || "{}");
-      for (const clave in datosGuardados) {
-        if (form.elements[clave]) {
-          form.elements[clave].value = datosGuardados[clave];
+    [...form.elements].forEach(el => {
+      if (el.name && el.type !== 'submit') {
+        const valor = el.value.trim();
+        datos[el.name] = valor;
+        el.classList.remove('error');
+        if (valor === "" && (el.tagName === "INPUT" || el.tagName === "TEXTAREA")) {
+          el.classList.add('error');
+          errorEncontrado = true;
         }
       }
     });
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      let valido = true;
-      const formData = new FormData(form);
-      for (const [clave, valor] of formData.entries()) {
-        const campo = form.elements[clave];
-        if (campo && campo.type !== "file") {
-          if (valor.trim() === "") {
-            campo.style.border = "2px solid red";
-            valido = false;
-          } else {
-            campo.style.border = "";
-          }
-        }
-      }
-
-      if (!valido) {
-        alert("Por favor completa los campos obligatorios marcados en rojo.");
-        return;
-      }
-
-      const datos = {};
-      formData.forEach((valor, clave) => {
-        datos[clave] = valor;
+    try {
+      const user = await new Promise((resolve, reject) => {
+        const unsubscribe = auth.onAuthStateChanged(u => {
+          unsubscribe();
+          u ? resolve(u) : reject("No has iniciado sesión.");
+        });
       });
 
-      try {
-        const docRef = await addDoc(collection(db, "usuarios"), datos);
-        localStorage.setItem("usuarioID", docRef.id);
-        localStorage.setItem("datosUsuario", JSON.stringify(datos));
-        alert("Información guardada correctamente ✅");
-        window.location.href = "perfil.html";
-      } catch (error) {
-        console.error("Error al guardar en Firestore:", error);
-        alert("Error al guardar los datos.");
-      }
-    });
-  </script>
+      await db.collection("usuarios").doc(user.uid).set(datos, { merge: true });
+
+      mensaje.innerHTML = "<div class='success'>✅ Datos guardados correctamente.</div>";
+    } catch (err) {
+      console.error("Error al guardar:", err);
+      mensaje.innerHTML = `<div class="error-msg">❌ ${err.message || err}</div>`;
+    }
+  });
+</script>
+
 </body>
 </html>
